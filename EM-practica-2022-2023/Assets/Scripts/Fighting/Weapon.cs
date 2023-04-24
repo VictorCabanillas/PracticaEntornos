@@ -18,7 +18,7 @@ namespace Fighting
             effect.transform.position = collision.GetContact(0).point;
             effect.SetTrigger(Hit03);
 
-            // TODO: Review if this is the best way to do this
+            // TODO: Review if this is the best way to do this <--------------------------IMPORTANTE
             IFighterReceiver enemy = otherObject.GetComponent<IFighterReceiver>();
             if(enemy != null )
                 enemy.TakeHit();
