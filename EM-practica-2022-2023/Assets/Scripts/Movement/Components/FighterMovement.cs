@@ -57,31 +57,12 @@ namespace Movement.Components
 
         public void Move(IMoveableReceiver.Direction direction)
         {
-            if (direction == IMoveableReceiver.Direction.None)
-            {
-                this._direction = Vector3.zero;
-                return;
-            }
-
-            bool lookingRight = direction == IMoveableReceiver.Direction.Right;
-            _direction = (lookingRight ? 1f : -1f) * speed * Vector3.right;
-            transform.localScale = new Vector3(lookingRight ? 1 : -1, 1, 1);
+            MoveServerRpc(direction);
         }
 
         public void Jump(IJumperReceiver.JumpStage stage)
         {
-            switch (stage)
-            {
-                case IJumperReceiver.JumpStage.Jumping:
-                    if (_grounded)
-                    {
-                        float jumpForce = Mathf.Sqrt(jumpAmount * -2.0f * (Physics2D.gravity.y * _rigidbody2D.gravityScale));
-                        _rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-                    }
-                    break;
-                case IJumperReceiver.JumpStage.Landing:
-                    break;
-            }
+            JumpServerRpc(stage);
         }
 
         public void Attack1()
@@ -103,5 +84,38 @@ namespace Movement.Components
         {
             _networkAnimator.SetTrigger(AnimatorDie);
         }
+    
+    
+        [ServerRpc]
+        public void MoveServerRpc(IMoveableReceiver.Direction direction) 
+        {
+            if (direction == IMoveableReceiver.Direction.None)
+            {
+                this._direction = Vector3.zero;
+                return;
+            }
+
+            bool lookingRight = direction == IMoveableReceiver.Direction.Right;
+            _direction = (lookingRight ? 1f : -1f) * speed * Vector3.right;
+            transform.localScale = new Vector3(lookingRight ? 1 : -1, 1, 1);
+        }
+
+        [ServerRpc]
+        public void JumpServerRpc(IJumperReceiver.JumpStage stage) 
+        {
+            switch (stage)
+            {
+                case IJumperReceiver.JumpStage.Jumping:
+                    if (_grounded)
+                    {
+                        float jumpForce = Mathf.Sqrt(jumpAmount * -2.0f * (Physics2D.gravity.y * _rigidbody2D.gravityScale));
+                        _rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+                    }
+                    break;
+                case IJumperReceiver.JumpStage.Landing:
+                    break;
+            }
+        }
+    
     }
 }
