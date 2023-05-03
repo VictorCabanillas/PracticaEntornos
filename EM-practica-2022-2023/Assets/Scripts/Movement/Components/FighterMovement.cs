@@ -67,22 +67,22 @@ namespace Movement.Components
 
         public void Attack1()
         {
-            _networkAnimator.SetTrigger(AnimatorAttack1);
+            AnimatorServerRpc(AnimatorAttack1);
         }
 
         public void Attack2()
         {
-            _networkAnimator.SetTrigger(AnimatorAttack2);
+            AnimatorServerRpc(AnimatorAttack2);
         }
 
         public void TakeHit()
         {
-            _networkAnimator.SetTrigger(AnimatorHit);
+            AnimatorServerRpc(AnimatorHit);
         }
 
         public void Die()
         {
-            _networkAnimator.SetTrigger(AnimatorDie);
+            AnimatorServerRpc(AnimatorDie);
         }
     
     
@@ -115,6 +115,12 @@ namespace Movement.Components
                 case IJumperReceiver.JumpStage.Landing:
                     break;
             }
+        }
+
+        [ServerRpc]
+        public void AnimatorServerRpc(int trigger) 
+        {
+            _networkAnimator.SetTrigger(trigger);
         }
     
     }

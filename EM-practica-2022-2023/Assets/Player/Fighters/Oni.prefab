@@ -210,9 +210,9 @@ GameObject:
   - component: {fileID: 7467422803991183043}
   - component: {fileID: -199720293087525386}
   - component: {fileID: 1925026832632699689}
-  - component: {fileID: -3126165782019819298}
   - component: {fileID: -2043236245414344890}
   - component: {fileID: 7081721694401746196}
+  - component: {fileID: -6799743399505791264}
   m_Layer: 6
   m_Name: Oni
   m_TagString: Untagged
@@ -398,20 +398,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-3126165782019819298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7467422803991183054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e275c8ecd26cfe041a4b55ebe3b0e2a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 7467422803991183055}
 --- !u!114 &-2043236245414344890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -450,6 +436,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6799743399505791264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7467422803991183054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 7467422803991183055}
 --- !u!1 &8174797378138190224
 GameObject:
   m_ObjectHideFlags: 0
