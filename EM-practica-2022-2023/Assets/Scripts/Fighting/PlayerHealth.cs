@@ -12,6 +12,11 @@ public class PlayerHealth : NetworkBehaviour
     void Start()
     {
         Health.Value = 100;
+        Health.OnValueChanged += updateHealth;
+    }
+    void updateHealth(int previous,int current) 
+    {
+        Health.Value = current;
     }
 
     public void DecreaseHealth(int amount) 

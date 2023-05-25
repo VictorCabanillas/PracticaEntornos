@@ -14,6 +14,10 @@ public class BarraDeVida : MonoBehaviour
     void Start(){
         vidaActual = vidaMaxima;
     }
+    private void Update()
+    {
+        CambiarBarra();
+    }
 
     // Update is called once per frame
     public void CambiarBarra()

@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: -1289683505315509345}
   - component: {fileID: 3570750329109796219}
   - component: {fileID: 3102812138166281984}
+  - component: {fileID: -490503375468763533}
   m_Layer: 6
   m_Name: Huntress
   m_TagString: Untagged
@@ -377,6 +378,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 3010630682321582530}
+--- !u!114 &-490503375468763533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010630682321582541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0215dfb3fa21ffd439393bf00ac551cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
 --- !u!1 &3010630682471395148
 GameObject:
   m_ObjectHideFlags: 0
