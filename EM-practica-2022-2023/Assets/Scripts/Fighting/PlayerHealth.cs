@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    NetworkVariable<int> Health=new NetworkVariable<int>();
+    NetworkVariable<int> Health = new NetworkVariable<int>();
     public GameObject healthBar;
 
     // Start is called before the first frame update
