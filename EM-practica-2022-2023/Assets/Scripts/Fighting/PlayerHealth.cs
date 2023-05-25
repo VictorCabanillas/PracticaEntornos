@@ -14,12 +14,6 @@ public class PlayerHealth : NetworkBehaviour
         Health.Value = 100;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void DecreaseHealth(int amount) 
     {
         Health.Value -= amount;
