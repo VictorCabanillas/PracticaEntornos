@@ -8,5 +8,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: ba9b3f7440453154eb0df6e330d7e673
+<<<<<<< Updated upstream
+=======
+  - enabled: 1
+    path: Assets/Scenes/Duplicados/Victor/GameSceneDuplicadoVictor.unity
+    guid: 453eca1b974d09e48b8428a637fc7640
+  - enabled: 1
+    path: Assets/Scenes/Duplicados/Agustin/GameScene.unity
+    guid: f4fc5813c9de845468514b5bd1930d2f
+>>>>>>> Stashed changes
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8af01114157c01147a9096c4d89006b3, type: 2}
