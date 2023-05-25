@@ -23,28 +23,6 @@ namespace UI
         public GameObject CrearBarras(int nPlayer)
         {
             return Instantiate(_ui, positions[nPlayer], _ui.transform.rotation, transform);
-            /*switch (nPlayer)
-            {
-                case 1:
-                    Instantiate(_ui, positions[0], _ui.transform.rotation, transform);
-                    break;
-                case 2:
-                    Instantiate(_ui, positions[0], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[1], _ui.transform.rotation, transform);
-                    break;
-                case 3:
-                    Instantiate(_ui, positions[0], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[1], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[2], _ui.transform.rotation, transform);
-                    break;
-                case 4:
-                    Debug.Log("Hola");
-                    Instantiate(_ui, positions[0], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[1], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[2], _ui.transform.rotation, transform);
-                    Instantiate(_ui, positions[3], _ui.transform.rotation, transform);
-                    break;
-            }*/
         }
     }
 }
