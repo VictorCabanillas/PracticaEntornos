@@ -22,6 +22,7 @@ namespace Netcode
             //Debug.Log((int)OwnerClientId);
             if (!IsOwner) return;
             InstantiateCharacterServerRpc(OwnerClientId);
+            assignHealthBar();
         }
 
     
@@ -32,6 +33,11 @@ namespace Netcode
             characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
             characterGameObject.transform.SetParent(transform, false);
             characterGameObject.GetComponent<PlayerHealth>().healthBar = healthBar;
+        }
+
+        void assignHealthBar() 
+        {
+        
         }
     }
 }
