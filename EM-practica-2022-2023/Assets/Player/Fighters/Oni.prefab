@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 7081721694401746196}
   - component: {fileID: -6799743399505791264}
   - component: {fileID: -3941683768825982815}
+  - component: {fileID: 6342470717430999111}
   m_Layer: 6
   m_Name: Oni
   m_TagString: Untagged
@@ -424,7 +425,7 @@ MonoBehaviour:
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
   InLocalSpace: 0
-  Interpolate: 1
+  Interpolate: 0
 --- !u!114 &7081721694401746196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,7 +464,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0215dfb3fa21ffd439393bf00ac551cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Health:
+    m_InternalValue: 0
   healthBar: {fileID: 0}
+--- !u!114 &6342470717430999111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7467422803991183054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ed3c1735593fd43a1ee96f3ef4ad96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8174797378138190224
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 388158845221268352}
+  - component: {fileID: 6261257508476827588}
   m_Layer: 6
   m_Name: Attacks
   m_TagString: Untagged
@@ -497,3 +513,15 @@ Transform:
   m_Father: {fileID: 7467422803991183041}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6261257508476827588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174797378138190224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fb13e95a32fed4b9dd1ae24eaa6243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

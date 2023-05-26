@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 776212678007527390}
   - component: {fileID: 4219828482768171485}
   - component: {fileID: -4803226756341610122}
+  - component: {fileID: 3313173990647614801}
   m_Layer: 6
   m_Name: Akai Kaze
   m_TagString: Untagged
@@ -230,7 +231,7 @@ MonoBehaviour:
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
   InLocalSpace: 0
-  Interpolate: 1
+  Interpolate: 0
 --- !u!114 &776212678007527390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +273,18 @@ MonoBehaviour:
   Health:
     m_InternalValue: 0
   healthBar: {fileID: 0}
+--- !u!114 &3313173990647614801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ed3c1735593fd43a1ee96f3ef4ad96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1279163059404656106
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7930650381332327188}
+  - component: {fileID: 2472542022041727896}
   m_Layer: 6
   m_Name: Attacks
   m_TagString: Untagged
@@ -336,6 +350,18 @@ Transform:
   m_Father: {fileID: 1279163059010513271}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2472542022041727896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2605859334394038608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fb13e95a32fed4b9dd1ae24eaa6243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4805699055951159437
 GameObject:
   m_ObjectHideFlags: 0

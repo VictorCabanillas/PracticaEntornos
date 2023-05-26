@@ -1,10 +1,11 @@
 using Movement.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Unity.Netcode;
 
 namespace Fighting
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : NetworkBehaviour
     {
         public Animator effectsPrefab;
         private static readonly int Hit03 = Animator.StringToHash("hit03");
@@ -19,8 +20,8 @@ namespace Fighting
             effect.SetTrigger(Hit03);
 
             // TODO: Review if this is the best way to do this
-            otherObject.GetComponent<IFighterReceiver>()?.TakeHit();
-            otherObject.GetComponent<PlayerHealth>()?.DecreaseHealth(10);
+                otherObject.GetComponent<IFighterReceiver>()?.TakeHit();
+                otherObject.GetComponent<PlayerHealth>()?.DecreaseHealth(10);
         }
     }
 }

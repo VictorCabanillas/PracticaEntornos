@@ -42,13 +42,12 @@ namespace Movement.Components
 
         void Update()
         {
-            if (!IsOwner) return;
+            if (!IsServer) return;
 
-            AnimatorMovServerRpc();
-            /*_grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
+            _grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
             _animator.SetFloat(AnimatorSpeed, this._direction.magnitude);
             _animator.SetFloat(AnimatorVSpeed, this._rigidbody2D.velocity.y);
-            _animator.SetBool(AnimatorGrounded, this._grounded);*/
+            _animator.SetBool(AnimatorGrounded, this._grounded);
         }
 
         void FixedUpdate()
@@ -68,22 +67,22 @@ namespace Movement.Components
 
         public void Attack1()
         {
-            AnimatorServerRpc(AnimatorAttack1);
+            _networkAnimator.SetTrigger(AnimatorAttack1);
         }
 
         public void Attack2()
         {
-            AnimatorServerRpc(AnimatorAttack2);
+            _networkAnimator.SetTrigger(AnimatorAttack2);
         }
 
         public void TakeHit()
         {
-            AnimatorServerRpc(AnimatorHit);
+            _networkAnimator.SetTrigger(AnimatorHit);
         }
 
         public void Die()
         {
-            AnimatorServerRpc(AnimatorDie);
+            _networkAnimator.SetTrigger(AnimatorDie);
         }
     
     
@@ -116,21 +115,6 @@ namespace Movement.Components
                 case IJumperReceiver.JumpStage.Landing:
                     break;
             }
-        }
-
-        [ServerRpc]
-        public void AnimatorServerRpc(int trigger) 
-        {
-            _networkAnimator.SetTrigger(trigger);
-        }
-
-        [ServerRpc]
-        public void AnimatorMovServerRpc()
-        {
-            _grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
-            _animator.SetFloat(AnimatorSpeed, this._direction.magnitude);
-            _animator.SetFloat(AnimatorVSpeed, this._rigidbody2D.velocity.y);
-            _animator.SetBool(AnimatorGrounded, this._grounded);
         }
     }
 }
