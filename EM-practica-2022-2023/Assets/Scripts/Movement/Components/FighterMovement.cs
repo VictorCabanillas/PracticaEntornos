@@ -43,11 +43,12 @@ namespace Movement.Components
         void Update()
         {
             if (!IsOwner) return;
-            
-            _grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
+
+            AnimatorMovServerRpc();
+            /*_grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
             _animator.SetFloat(AnimatorSpeed, this._direction.magnitude);
             _animator.SetFloat(AnimatorVSpeed, this._rigidbody2D.velocity.y);
-            _animator.SetBool(AnimatorGrounded, this._grounded);
+            _animator.SetBool(AnimatorGrounded, this._grounded);*/
         }
 
         void FixedUpdate()
@@ -122,6 +123,14 @@ namespace Movement.Components
         {
             _networkAnimator.SetTrigger(trigger);
         }
-    
+
+        [ServerRpc]
+        public void AnimatorMovServerRpc()
+        {
+            _grounded = Physics2D.OverlapCircle(_feet.position, 0.1f, _floor);
+            _animator.SetFloat(AnimatorSpeed, this._direction.magnitude);
+            _animator.SetFloat(AnimatorVSpeed, this._rigidbody2D.velocity.y);
+            _animator.SetBool(AnimatorGrounded, this._grounded);
+        }
     }
 }

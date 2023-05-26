@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 2890134430573022485}
   - component: {fileID: 776212678007527390}
   - component: {fileID: 4219828482768171485}
+  - component: {fileID: -4803226756341610122}
   m_Layer: 6
   m_Name: Akai Kaze
   m_TagString: Untagged
@@ -256,6 +257,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 1279163059010513269}
+--- !u!114 &-4803226756341610122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0215dfb3fa21ffd439393bf00ac551cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health:
+    m_InternalValue: 0
+  healthBar: {fileID: 0}
 --- !u!1 &1279163059404656106
 GameObject:
   m_ObjectHideFlags: 0

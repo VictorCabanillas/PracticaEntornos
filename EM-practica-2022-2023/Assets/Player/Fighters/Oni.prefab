@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: -2043236245414344890}
   - component: {fileID: 7081721694401746196}
   - component: {fileID: -6799743399505791264}
+  - component: {fileID: -3941683768825982815}
   m_Layer: 6
   m_Name: Oni
   m_TagString: Untagged
@@ -450,6 +451,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 7467422803991183055}
+--- !u!114 &-3941683768825982815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7467422803991183054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0215dfb3fa21ffd439393bf00ac551cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
 --- !u!1 &8174797378138190224
 GameObject:
   m_ObjectHideFlags: 0
