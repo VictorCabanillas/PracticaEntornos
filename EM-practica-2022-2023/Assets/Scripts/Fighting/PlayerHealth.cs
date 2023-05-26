@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class PlayerHealth : NetworkBehaviour
 {
-    NetworkVariable<int> Health = new NetworkVariable<int>();
+    public NetworkVariable<int> Health = new NetworkVariable<int>();
     public GameObject healthBar;
 
     // Start is called before the first frame update
@@ -17,6 +17,7 @@ public class PlayerHealth : NetworkBehaviour
     void updateHealth(int previous,int current) 
     {
         Health.Value = current;
+        healthBar.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
     }
 
     public void DecreaseHealth(int amount) 

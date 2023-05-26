@@ -19,7 +19,7 @@ namespace Netcode
         public override void OnNetworkSpawn()
         {
             healthBar=UImanager.CrearBarras((int)OwnerClientId);
-            Debug.Log((int)OwnerClientId);
+            //Debug.Log((int)OwnerClientId);
             if (!IsOwner) return;
             InstantiateCharacterServerRpc(OwnerClientId);
         }

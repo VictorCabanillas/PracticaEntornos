@@ -13,10 +13,10 @@ namespace UI
         {
             Transform transform = GetComponent<Transform>();
             positions = new Vector3[4];
-            positions[0] = new Vector3(-440 + transform.position.x, 200 + transform.position.y, 0);
-            positions[1] = new Vector3(440 + transform.position.x, 200 + transform.position.y, 0);
-            positions[2] = new Vector3(-440 + transform.position.x, -200 + transform.position.y, 0);
-            positions[3] = new Vector3(440 + transform.position.x, -200 + transform.position.y, 0);
+            positions[0] = new Vector3(-220 + transform.position.x, 200 + transform.position.y, 0);
+            positions[1] = new Vector3(220 + transform.position.x, 200 + transform.position.y, 0);
+            positions[2] = new Vector3(-220 + transform.position.x, -200 + transform.position.y, 0);
+            positions[3] = new Vector3(220 + transform.position.x, -200 + transform.position.y, 0);
             //CrearBarras(3);
         }
 
