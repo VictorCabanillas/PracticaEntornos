@@ -13,7 +13,6 @@ public class PlayerHealth : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Health.Value = 100;
         Health.OnValueChanged += updateHealth;
     }
     void updateHealth(int previous,int current) 

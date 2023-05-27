@@ -7,6 +7,6 @@ public class DisableAtack : NetworkBehaviour
 {
     void Start()
     {
-        if (IsClient) { gameObject.active = false; }
+        //if (IsClient) { gameObject.active = false; }
     }
 }
