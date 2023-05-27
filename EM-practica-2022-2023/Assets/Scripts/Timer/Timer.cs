@@ -10,55 +10,51 @@ public class Timer : NetworkBehaviour
     [SerializeField] float totalTime;
     [SerializeField] GameObject timerGameObject;
     TextMeshProUGUI timerText;
-    public NetworkVariable<String> timerTextFinal;
+    public NetworkVariable<float> timerTextFinal  = new NetworkVariable<float>();
+    public NetworkVariable<int> tSeconds = new NetworkVariable<int>(0);
+    public NetworkVariable<int> tMinutes  = new NetworkVariable<int>(0);
 
     void Start()
     {
-        timerTextFinal = new NetworkVariable<String>("");
-        StartTimer();
         timerTextFinal.OnValueChanged += updateTimer;
+        StartTimer();
     }
 
     public void StartTimer()
     {
         timerText = timerGameObject.GetComponent<TextMeshProUGUI>();
-        if(IsServer) StartCoroutine(CalculateTime());
+        StartCoroutine(CalculateTime());
     }
 
     IEnumerator CalculateTime()
     {
-
-        float counter = 0;
-        int tMinutes = 0, tSeconds = 0;
-        String sMinutes = "", sSeconds = "";
-
+        float counter = totalTime;
         while (counter > 0)
         {
-            tMinutes = (int)counter / 60;
-            tSeconds = (int)counter % 60;
-
-            if (tMinutes < 10)
-            {
-                sMinutes = "0" + tMinutes;
-            }
-            else sMinutes = tMinutes.ToString();
-            if (tSeconds < 10)
-            {
-                sSeconds = "0" + tSeconds;
-            }
-            else sSeconds = tSeconds.ToString();
-
-            timerTextFinal = new NetworkVariable<String>(sMinutes + ":" + sSeconds);
-
+            timerTextFinal.Value = counter;
+            tMinutes.Value = (int) timerTextFinal.Value / 60;
+            tSeconds.Value = (int) timerTextFinal.Value % 60;
             counter -= Time.deltaTime;
             yield return null;
         }
-        Debug.Log("END");
     }
 
-    void updateTimer(String previous, String current)
+    void updateTimer(float previous, float current)
     {
-        timerTextFinal.Value = current;
-        timerText.text = timerTextFinal.Value;
+        Debug.Log(tMinutes.Value);
+        String sMinutes = "", sSeconds = "";
+
+            if (tMinutes.Value < 10)
+            {
+                sMinutes = "0" + tMinutes.Value;
+            }
+            else sMinutes = tMinutes.Value.ToString();
+            if (tSeconds.Value < 10)
+            {
+                sSeconds = "0" + tSeconds.Value;
+            }
+            else sSeconds = tSeconds.Value.ToString();
+
+        timerText.text = sMinutes + ":" + sSeconds;
     }
 }

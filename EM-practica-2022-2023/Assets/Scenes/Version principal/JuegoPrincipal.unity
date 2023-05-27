@@ -10508,6 +10508,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7149767608058864997, guid: 0ebc7e644fe404144a5e394b29378da7, type: 3}
+      propertyPath: timerGameObject
+      value: 
+      objectReference: {fileID: 1858374246}
     - target: {fileID: 7149767608058864998, guid: 0ebc7e644fe404144a5e394b29378da7, type: 3}
       propertyPath: m_Name
       value: Timer
@@ -12950,7 +12954,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1389431229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.19374, y: 0.4848437, z: -10.063926}
+  m_LocalPosition: {x: 2.2579384, y: 0.4848437, z: -10.063926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13606,7 +13610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5949619376291943044, guid: 178f0b4a57b182045ae04ba4cd2569f7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 300
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5949619376291943044, guid: 178f0b4a57b182045ae04ba4cd2569f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14010,6 +14014,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1858374246 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5949619376291943163, guid: 178f0b4a57b182045ae04ba4cd2569f7, type: 3}
+  m_PrefabInstance: {fileID: 1770444276}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1919261899
 GameObject:
   m_ObjectHideFlags: 0
