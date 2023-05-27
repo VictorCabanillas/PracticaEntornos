@@ -6,10 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Version principal/MainMenu.unity
+    guid: 4c73b0a207361fd43a77a9947a3cf710
+  - enabled: 1
     path: Assets/Scenes/Version principal/JuegoPrincipal.unity
     guid: ba9b3f7440453154eb0df6e330d7e673
   - enabled: 1
     path: Assets/Scenes/Duplicados/Victor/GameSceneDuplicadoVictor.unity
     guid: 453eca1b974d09e48b8428a637fc7640
+  - enabled: 1
+    path: Assets/Scenes/Version principal/CharacterSelector.unity
+    guid: 28a9c209b2bd17f4892a1b85f93611ca
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8af01114157c01147a9096c4d89006b3, type: 2}
