@@ -23,7 +23,7 @@ namespace Netcode
             GameObject characterGameObject = Instantiate(characterPrefab);
             characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
             characterGameObject.transform.SetParent(transform, false);
-            
+            characterGameObject.GetComponent<PlayerHealth>().Health.Value = 100;
         }
     }
 }
