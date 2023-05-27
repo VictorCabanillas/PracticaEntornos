@@ -62,3 +62,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 1279163059010513274, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
+  TimerPrefab: {fileID: 7149767608058864998, guid: 0ebc7e644fe404144a5e394b29378da7, type: 3}

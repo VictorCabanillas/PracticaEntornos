@@ -8,14 +8,16 @@ namespace Netcode
     public class PlayerNetworkConfig : NetworkBehaviour
     {
         public GameObject characterPrefab;
+        public GameObject timerPrefab;
         
 
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
-            InstantiateCharacterServerRpc(OwnerClientId);   
-        }
+            InstantiateCharacterServerRpc(OwnerClientId);
 
+            if (!IsOwner) InstantiateTimerServerRpc();
+        }
     
         [ServerRpc]
         public void InstantiateCharacterServerRpc(ulong id)
@@ -24,6 +26,12 @@ namespace Netcode
             characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
             characterGameObject.transform.SetParent(transform, false);
             characterGameObject.GetComponent<PlayerHealth>().Health.Value = 100;
+        }
+
+        [ServerRpc]
+        public void InstantiateTimerServerRpc()
+        {
+            GameObject timerGameObject = Instantiate(timerPrefab);
         }
     }
 }
