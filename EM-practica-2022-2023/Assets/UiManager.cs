@@ -16,6 +16,7 @@ namespace UI
 
         public GameObject CrearBarras(int nPlayer)
         {
+            Debug.Log(nPlayer);
             var playerUI = Instantiate(_ui);
             playerUI.transform.SetParent(transform, false);
             playerUI.transform.localPosition = positions[nPlayer];

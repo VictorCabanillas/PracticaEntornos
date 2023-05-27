@@ -18,7 +18,7 @@ public class PlayerData : NetworkBehaviour
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        Object.DontDestroyOnLoad(gameObject);
+        //Object.DontDestroyOnLoad(gameObject);
         Name.OnValueChanged += (string previous, string current) => { Name.Value = current; };
     }
 
@@ -27,7 +27,7 @@ public class PlayerData : NetworkBehaviour
         if (scene.name == "CharacterSelector")
         {
             if (!IsOwner) return;
-            //InstantiateSelectorServerRpc(OwnerClientId);
+            InstantiateSelectorServerRpc(OwnerClientId);
         }
 
         if (scene.name == "JuegoPrincipal")
@@ -67,8 +67,9 @@ public class PlayerData : NetworkBehaviour
     {
         if(IsOwner)
         {
+            Object.DontDestroyOnLoad(gameObject);
             Name.Value = PlayerPrefs.GetString("NombreJugador");
-            InstantiateSelectorServerRpc(OwnerClientId);
+            //InstantiateSelectorServerRpc(OwnerClientId);
         }
     }
 }

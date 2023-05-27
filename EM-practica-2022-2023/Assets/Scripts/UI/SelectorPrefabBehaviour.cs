@@ -23,15 +23,8 @@ public class SelectorPrefabBehaviour : NetworkBehaviour
         return FindObjectOfType<PlayerData>();
     }
 
-    // Start is called before the first frame update
     void Awake()
     {
         uiManager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

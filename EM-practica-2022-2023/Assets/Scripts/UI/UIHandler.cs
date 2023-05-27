@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class UIHandler : MonoBehaviour
+    public class UIHandler : NetworkBehaviour
     {
         public GameObject debugPanel;
         public Button hostButton;
@@ -110,7 +110,9 @@ namespace UI
                 NetworkManager.Singleton.StartClient();
             }
 
-            SceneManager.LoadScene("CharacterSelector");
+            NetworkManager.SceneManager.LoadScene("CharacterSelector",LoadSceneMode.Single);
+            
+            //SceneManager.LoadScene("CharacterSelector");
 
         }
 
