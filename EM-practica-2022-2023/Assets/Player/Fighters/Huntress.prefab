@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 3870369496559491734}
   m_Layer: 6
   m_Name: Huntress
-  m_TagString: Untagged
+  m_TagString: Personaje
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
