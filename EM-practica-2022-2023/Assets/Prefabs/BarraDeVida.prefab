@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4056967079449465470}
   - component: {fileID: 1360258647637772969}
   - component: {fileID: 2771481667735070902}
-  - component: {fileID: 310157084558076699}
   m_Layer: 5
   m_Name: Relleno
   m_TagString: Untagged
@@ -77,19 +76,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &310157084558076699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625954623215561510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68b4fae698bd3bb4eb8b6569a6dc634b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vidaMaxima: 100
 --- !u!1 &5984964747206061254
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +222,7 @@ GameObject:
   - component: {fileID: 8264889912118117744}
   - component: {fileID: 4728562623619905477}
   - component: {fileID: 5987305701311879367}
+  - component: {fileID: 5714207088050566608}
   m_Layer: 5
   m_Name: BarraDeVida
   m_TagString: Untagged
@@ -303,3 +290,16 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5714207088050566608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7330279289346974000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b4fae698bd3bb4eb8b6569a6dc634b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vidaMaxima: 0

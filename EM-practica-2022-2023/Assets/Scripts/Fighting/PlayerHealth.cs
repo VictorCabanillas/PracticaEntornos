@@ -32,4 +32,8 @@ public class PlayerHealth : NetworkBehaviour
     {
         Health.Value -= amount;
     }
+
+    public int GetVida(){
+        return Health.Value;
+    }
 }
