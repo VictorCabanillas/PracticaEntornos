@@ -20,8 +20,8 @@ namespace Fighting
             effect.SetTrigger(Hit03);
 
             // TODO: Review if this is the best way to do this
-                otherObject.GetComponent<IFighterReceiver>()?.TakeHit();
-                otherObject.GetComponent<PlayerHealth>()?.DecreaseHealth(10);
+            otherObject.GetComponent<IFighterReceiver>()?.TakeHit();
+            otherObject.GetComponent<PlayerHealth>()?.DecreaseHealth(10);
         }
     }
 }
