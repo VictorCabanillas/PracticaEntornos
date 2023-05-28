@@ -14,7 +14,6 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     private void Awake()
     {
-        UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
     }
 
@@ -22,12 +21,17 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     {
         if (IsClient)
         {
+            UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
             selectorInfo = UImanager.CrearBarras((int)OwnerClientId);
-
-            parent = transform.parent.gameObject;
-            string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
-            selectorInfo.GetComponent<PlayerSelectorInfo>().playerName.text = text;
         }
+        parentReady();
+    }
+
+    public void parentReady() 
+    {
+        parent = transform.parent.gameObject;
+        string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
+        selectorInfo.GetComponent<PlayerSelectorInfo>().playerName.text = text;
     }
 
     private void onSceneUnload(ulong clientId, string sceneName, AsyncOperation asyncOperation) 

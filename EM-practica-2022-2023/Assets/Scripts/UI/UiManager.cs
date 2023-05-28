@@ -11,7 +11,6 @@ namespace UI
 
         public GameObject CrearBarras(int nPlayer)
         {
-            Debug.Log(nPlayer);
             Vector3 position = positions[nPlayer] + transform.position;
             GameObject objeto = Instantiate(_ui, position, _ui.transform.rotation);
             objeto.transform.SetParent(transform);

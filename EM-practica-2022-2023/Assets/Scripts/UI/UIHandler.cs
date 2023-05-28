@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class UIHandler : MonoBehaviour
+    public class UIHandler : NetworkBehaviour
     {
         public GameObject Buttons;
         public GameObject nameSelector;
@@ -38,6 +38,8 @@ namespace UI
 
             backButton.onClick.AddListener(OnBackButtonClicked);
             confirmButton.onClick.AddListener(OnConfirmButtonClicked);
+
+            NetworkManager.Singleton.OnServerStarted+=loadScene;
         }
 
         private void storeAdress() 
@@ -88,7 +90,19 @@ namespace UI
             {
                 NetworkManager.Singleton.StartHost();
             }
-            NetworkManager.Singleton.SceneManager.LoadScene("SelectorPersonaje",LoadSceneMode.Single);
+        }
+
+        private void loadScene() 
+        {
+            if (NetworkManager.Singleton.IsServer || IsHost)
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene("SelectorPersonaje", LoadSceneMode.Single);
+            }
+            
+        }
+        private void OnDisable()
+        {
+            NetworkManager.Singleton.OnServerStarted -= loadScene;
         }
     }
 }
