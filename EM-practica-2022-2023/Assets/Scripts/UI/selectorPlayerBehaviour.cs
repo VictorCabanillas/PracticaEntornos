@@ -22,16 +22,25 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsClient)
         {
             UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-            selectorInfo = UImanager.CrearBarras((int)OwnerClientId);
+            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId); //Aqui
         }
-        parentReady();
+        if (!IsOwner)
+        {
+            if (transform.parent != null)
+            {
+                parentReady();
+            }
+        }
     }
 
     public void parentReady() 
     {
         parent = transform.parent.gameObject;
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
-        selectorInfo.GetComponent<PlayerSelectorInfo>().playerName.text = text;
+        if (selectorInfo != null)
+        {
+            selectorInfo.GetComponent<PlayerSelectorInfo>().playerName.text = text;
+        }
     }
 
     private void onSceneUnload(ulong clientId, string sceneName, AsyncOperation asyncOperation) 

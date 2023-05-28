@@ -19,7 +19,7 @@ public class SpawningBehaviour : NetworkBehaviour
     }
     void cambiarNombre(FixedString64Bytes previous, FixedString64Bytes current) 
     {
-        transform.GetChild(0).GetComponent<selectorPlayerBehaviour>().parentReady();
+        transform.GetChild(0).GetComponent<selectorPlayerBehaviour>()?.parentReady();
     }
 
     void sceneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) 
@@ -49,6 +49,13 @@ public class SpawningBehaviour : NetworkBehaviour
                 InstantiateSelectorServerRpc(OwnerClientId);
             }
         }
+        else
+        {
+            if (transform.childCount > 0)
+            {
+                transform.GetChild(0).GetComponent<selectorPlayerBehaviour>()?.parentReady();
+            }
+        }
     }
 
 
@@ -69,7 +76,13 @@ public class SpawningBehaviour : NetworkBehaviour
         GameObject characterGameObject = Instantiate(selectorPrefab,transform);
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         characterGameObject.transform.SetParent(transform, false); //Esto ocurre despues
-        characterGameObject.GetComponent<selectorPlayerBehaviour>().parentReady();
+        //characterGameObject.GetComponent<selectorPlayerBehaviour>()?.parentReady();
+        UpdateNameClientRpc();
     }
 
+    [ClientRpc]
+    public void UpdateNameClientRpc() 
+    {
+        transform.GetChild(0).GetComponent<selectorPlayerBehaviour>()?.parentReady();
+    }
 }
