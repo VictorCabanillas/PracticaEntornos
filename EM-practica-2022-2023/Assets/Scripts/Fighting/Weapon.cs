@@ -1,10 +1,11 @@
 using Movement.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Unity.Netcode;
 
 namespace Fighting
 {
-    public class Weapon : MonoBehaviour
+    public class Weapon : NetworkBehaviour
     {
         public Animator effectsPrefab;
         private static readonly int Hit03 = Animator.StringToHash("hit03");
