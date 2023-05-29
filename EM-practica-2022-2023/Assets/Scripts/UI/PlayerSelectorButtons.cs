@@ -9,4 +9,5 @@ public class PlayerSelectorButtons : MonoBehaviour
     public Button akaiKazeButton;
     public Button oniButton;
     public Button readyButton;
+    public Button startButton;
 }

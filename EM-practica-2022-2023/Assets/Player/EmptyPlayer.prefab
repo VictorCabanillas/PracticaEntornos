@@ -61,7 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f609818a996b5c4488f9fac8a4ca8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 3010630682321582541, guid: 06b98e5343c113147985cd4116ac1cdb, type: 3}
+  characterPrefab: 0
+  characters:
+  - {fileID: 3010630682321582541, guid: 06b98e5343c113147985cd4116ac1cdb, type: 3}
+  - {fileID: 1279163059010513274, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
+  - {fileID: 7467422803991183054, guid: eefd1982948af6448a89a5714bb66417, type: 3}
   selectorPrefab: {fileID: 9046652420056714103, guid: fb6f333f5bf5ac7478c1bde31cfaf379, type: 3}
   playerName:
     m_InternalValue:
@@ -132,3 +136,4 @@ MonoBehaviour:
         byte0059: 0
         byte0060: 0
         byte0061: 0
+  playingServer: 0

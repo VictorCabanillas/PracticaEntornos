@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UI;
+using UnityEngine.SceneManagement;
 
 public class selectorPlayerBehaviour : NetworkBehaviour
 {
@@ -17,8 +18,13 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public GameObject[] playersPrefabs;
 
+    bool once = true;
+    bool isSceneUnloading = false;
+    bool spawnOneBar = true;
+
     private void Awake()
     {
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
         selectedCharacter.OnValueChanged += selectedCharacterChanged;
         ready.OnValueChanged += playerReady;
@@ -31,17 +37,16 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public void playerReady(bool previous, bool current) 
     {
-        Debug.Log("Readiness changed");
-        selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready";
+        if (IsClient)
+        {
+            selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready";
+        }
     }
 
     public override void OnNetworkSpawn()
     {
-        if (IsClient)
-        {
-            UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
-        }
+        UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
+        //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
         if (!IsOwner)
         {
             if (transform.parent != null)
@@ -52,18 +57,29 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsOwner) 
         {
             selectorButtons = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>();
-            selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[0]; });
-            selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[1]; });
-            selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[2]; });
-            selectorButtons?.readyButton.onClick.AddListener(()=> { Debug.Log("readyButton pressed"); ready.Value = true; });
-
-            //NetworkManager.Singleton.GetComponent<>();
+            selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 0; });
+            selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 1; });
+            selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 2; });
+            selectorButtons?.readyButton.onClick.AddListener(()=> { ready.Value = true; if (once) { Debug.Log("Cliente activa player Ready"); once = false; playerReadyServerRpc(); } });
         }
+    }
+
+    [ServerRpc]
+    public void playerReadyServerRpc() 
+    {
+        Debug.Log("Player ready server rpc");
+        GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReady();
     }
 
     public void parentReady() 
     {
         parent = transform.parent.gameObject;
+        UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        if (IsClient && spawnOneBar)
+        {
+            spawnOneBar = false;
+            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
+        }
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
         if (selectorInfo != null)
         {
@@ -71,15 +87,30 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
+    private void onSceneLoad(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) 
+    {
+        if (sceneName == "JuegoPrincipal")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void onSceneUnload(ulong clientId, string sceneName, AsyncOperation asyncOperation) 
     {
-        Destroy(gameObject);
+        isSceneUnloading = true;
     }
 
 
     public override void OnNetworkDespawn()
     {
         //If ready was true decrease player count;
-        Destroy(selectorInfo);
+        if (!isSceneUnloading)
+        {
+            if (ready.Value)
+            {
+                GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
+            }
+            Destroy(selectorInfo);
+        }
     }
 }
