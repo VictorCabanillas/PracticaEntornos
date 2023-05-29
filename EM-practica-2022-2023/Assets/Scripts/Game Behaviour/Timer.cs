@@ -17,18 +17,40 @@ public class Timer : NetworkBehaviour
 
     private void Start()
     {
+        Debug.Log("START");
         
+
+         InstatiateClockServerRpc();
+        
+
         restante.OnValueChanged += UpdateClock;
-        restante.Value = (min * 60) + seg;
-        if (NetworkManager.Singleton.IsServer)
-        {
-            NetworkObject.Spawn(this);
-        }
-        
     }
 
-    
-    
+    [ServerRpc]
+    public void InstatiateClockServerRpc()
+    {
+        GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log("Entrando ONNETWORKSPAWN");
+
+        if(IsServer)
+        {
+            restante.Value = (min * 60) + seg;
+        }
+        
+
+        if (IsClient)
+        {
+            Debug.Log("VALOR: " + restante.Value.ToString());
+            
+            
+        }
+       
+    }
+
     public void UpdateClock(float previous, float current)
     {
         int tempMin = Mathf.FloorToInt(restante.Value / 60);
@@ -36,17 +58,22 @@ public class Timer : NetworkBehaviour
         tiempo.text = string.Format("{00:00}:{01:00}", tempMin, tempSeg);
     }
 
-    
-
-
     // Update is called once per frame
     void Update()
     {
-       if((NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient) && enMarcha)
+       
+    }
+
+    private void LateUpdate()
+    {
+
+        Debug.Log(IsServer);
+        if ((NetworkManager.Singleton.IsServer) && enMarcha)
         {
-            
+
+            Debug.Log("ENTRANDO ACAAAAAAAAA");
             restante.Value -= Time.deltaTime;
-            if(restante.Value < 1) 
+            if (restante.Value < 1)
             {
                 enMarcha = false;
                 //MATAR JUGADOR

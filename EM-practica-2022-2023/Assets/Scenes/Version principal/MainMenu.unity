@@ -1200,6 +1200,11 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 3873044328541492869, guid: f65bc2ae803ca87419e56924ee618e8a, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -15598,11 +15603,7 @@ MonoBehaviour:
   hostButton: {fileID: 1780285911}
   clientButton: {fileID: 903387481}
   serverButton: {fileID: 994361599}
-  confirmNameButton: {fileID: 899815692}
-  namePlayer: {fileID: 413933701}
-  IP: {fileID: 220497950}
-  Port: {fileID: 152695037}
-  nameSelectorPanel: {fileID: 1045823118}
+  IPText: {fileID: 0}
 --- !u!4 &1769254125
 Transform:
   m_ObjectHideFlags: 0
