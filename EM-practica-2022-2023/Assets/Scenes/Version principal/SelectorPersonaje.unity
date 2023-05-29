@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 1566839085
-  AlwaysReplicateAsRoot: 0
+  AlwaysReplicateAsRoot: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!1 &698112249
@@ -1904,6 +1904,7 @@ MonoBehaviour:
   - {x: 0, y: 110, z: 0}
   - {x: 0, y: 40, z: 0}
   - {x: 0, y: -30, z: 0}
+  playingServer: 0
 --- !u!1 &2021565020
 GameObject:
   m_ObjectHideFlags: 0

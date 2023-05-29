@@ -20,6 +20,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     bool once = true;
     bool isSceneUnloading = false;
+    bool spawnOneBar = true;
 
     private void Awake()
     {
@@ -36,17 +37,16 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public void playerReady(bool previous, bool current) 
     {
-        Debug.Log("Readiness changed");
-        selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready";
+        if (IsClient)
+        {
+            selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready";
+        }
     }
 
     public override void OnNetworkSpawn()
     {
-        if (IsClient)
-        {
-            UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-            //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
-        }
+        UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
+        //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
         if (!IsOwner)
         {
             if (transform.parent != null)
@@ -57,9 +57,9 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsOwner) 
         {
             selectorButtons = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>();
-            selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[0]; });
-            selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[1]; });
-            selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[2]; });
+            selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 0; });
+            selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 1; });
+            selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = 2; });
             selectorButtons?.readyButton.onClick.AddListener(()=> { ready.Value = true; if (once) { Debug.Log("Cliente activa player Ready"); once = false; playerReadyServerRpc(); } });
         }
     }
@@ -67,15 +67,19 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     [ServerRpc]
     public void playerReadyServerRpc() 
     {
-        GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReadyServerRpc();
+        Debug.Log("Player ready server rpc");
+        GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReady();
     }
 
     public void parentReady() 
     {
         parent = transform.parent.gameObject;
         UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
-        Debug.Log(UImanager.playingServer);
-        selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
+        if (IsClient && spawnOneBar)
+        {
+            spawnOneBar = false;
+            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
+        }
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
         if (selectorInfo != null)
         {

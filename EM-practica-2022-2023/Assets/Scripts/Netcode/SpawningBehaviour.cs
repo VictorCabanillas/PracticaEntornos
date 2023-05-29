@@ -7,7 +7,8 @@ using Unity.Collections;
 
 public class SpawningBehaviour : NetworkBehaviour
 {
-    public GameObject characterPrefab;
+    public int characterPrefab;
+    public GameObject[] characters;
     public GameObject selectorPrefab;
 
     public NetworkVariable<FixedString64Bytes> playerName = new NetworkVariable<FixedString64Bytes>(default,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
@@ -32,7 +33,8 @@ public class SpawningBehaviour : NetworkBehaviour
         }
         if (sceneName == "JuegoPrincipal") 
         {
-            InstantiateCharacterServerRpc(OwnerClientId);
+            Debug.Log("Personaje a spawnear: " + characterPrefab);
+            InstantiateCharacterServerRpc(OwnerClientId,characterPrefab);
         }
     }
 
@@ -58,9 +60,11 @@ public class SpawningBehaviour : NetworkBehaviour
 
 
     [ServerRpc]
-    public void InstantiateCharacterServerRpc(ulong id)
+    public void InstantiateCharacterServerRpc(ulong id, int characterNum)
     {
-        GameObject characterGameObject = Instantiate(characterPrefab);
+        Debug.Log("Personaje a spawnear: " + characterPrefab);
+        GameObject characterToSpawn = characters[characterNum];
+        GameObject characterGameObject = Instantiate(characterToSpawn);
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         characterGameObject.transform.SetParent(transform, false);
         characterGameObject.GetComponent<PlayerHealth>().Health.Value = 100;
@@ -69,12 +73,16 @@ public class SpawningBehaviour : NetworkBehaviour
     [ServerRpc]
     public void InstantiateSelectorServerRpc(ulong id)
     {
-        //GetComponent<selectorPlayerBehaviour>().enabled = true;
         GameObject characterGameObject = Instantiate(selectorPrefab,transform);
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         characterGameObject.transform.SetParent(transform, false); //Esto ocurre despues
-        //characterGameObject.GetComponent<selectorPlayerBehaviour>()?.parentReady();
         UpdateNameClientRpc();
+    }
+
+    [ClientRpc]
+    public void CreateBarClientRpc()
+    {
+        transform.GetChild(0).GetComponent<AsociarBarras>()?.crearBarras();
     }
 
     [ClientRpc]

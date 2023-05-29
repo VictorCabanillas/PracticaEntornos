@@ -10,15 +10,14 @@ public class AllPlayerReady : NetworkBehaviour
     int playerReady = 0;
 
 
-    [ServerRpc]
-    public void playerIsReadyServerRpc() 
+    public void playerIsReady() 
     {
         playerReady += 1;
-        Debug.Log("Ready players: " + playerReady);
+        Debug.Log("Jugadores listos: " + playerReady);
         Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
         if (playerReady == NetworkManager.Singleton.ConnectedClients.Count) 
         {
-            Debug.Log("Activamos boton start");
+            Debug.Log("Todos listos aparece boton start");
             activateStartButtonClientRpc();
         }
     }
@@ -40,7 +39,9 @@ public class AllPlayerReady : NetworkBehaviour
     [ClientRpc]
     public void activateStartButtonClientRpc() 
     {
-        if (NetworkManager.Singleton.LocalClientId == 0) 
+        int firstPlayerID = PlayerPrefs.GetInt("playingServer") == 1 ? 1 : 0;
+        Debug.Log(NetworkManager.Singleton.LocalClientId);
+        if (NetworkManager.Singleton.LocalClientId == (ulong)firstPlayerID) 
         {
             Button startButton = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>().startButton;
             startButton.gameObject.SetActive(true);
@@ -63,7 +64,7 @@ public class AllPlayerReady : NetworkBehaviour
     }
 
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership =false)]
     public void startMatchServerRpc() 
     {
         DontDestroyOnLoad(gameObject);
@@ -73,6 +74,6 @@ public class AllPlayerReady : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        NetworkManager.Singleton.SceneManager.LoadScene("JuegoPrincipal", LoadSceneMode.Single);
+        //NetworkManager.Singleton.SceneManager.LoadScene("JuegoPrincipal", LoadSceneMode.Single);
     }
 }
