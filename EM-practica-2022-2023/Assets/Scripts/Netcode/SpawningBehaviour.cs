@@ -40,7 +40,7 @@ public class SpawningBehaviour : NetworkBehaviour
         if (IsOwner)
         {
             playerName.Value = PlayerPrefs.GetString("playerName");
-            if (NetworkManager.Singleton.IsClient)
+            if (NetworkManager.Singleton.IsClient && NetworkManager.Singleton.LocalClientId!=0)
             {
                 InstantiateSelectorServerRpc(OwnerClientId);
             }

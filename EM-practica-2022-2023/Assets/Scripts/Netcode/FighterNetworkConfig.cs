@@ -2,6 +2,7 @@
 using Movement.Components;
 using Systems;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace Netcode
 {
@@ -14,6 +15,7 @@ namespace Netcode
             FighterMovement fighterMovement = GetComponent<FighterMovement>();
             InputSystem.Instance.Character = fighterMovement;
             ICinemachineCamera virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
+            Debug.Log(virtualCamera);
             virtualCamera.Follow = transform;
         }
     }

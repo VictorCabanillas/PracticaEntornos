@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UI;
+using UnityEngine.SceneManagement;
 
 public class selectorPlayerBehaviour : NetworkBehaviour
 {
@@ -17,8 +18,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public GameObject[] playersPrefabs;
 
+    bool once = true;
+    bool isSceneUnloading = false;
+
     private void Awake()
     {
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
         selectedCharacter.OnValueChanged += selectedCharacterChanged;
         ready.OnValueChanged += playerReady;
@@ -55,10 +60,14 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[0]; });
             selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[1]; });
             selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[2]; });
-            selectorButtons?.readyButton.onClick.AddListener(()=> { Debug.Log("readyButton pressed"); ready.Value = true; });
-
-            //NetworkManager.Singleton.GetComponent<>();
+            selectorButtons?.readyButton.onClick.AddListener(()=> { ready.Value = true; if (once) { Debug.Log("Cliente activa player Ready"); once = false; playerReadyServerRpc(); } });
         }
+    }
+
+    [ServerRpc]
+    public void playerReadyServerRpc() 
+    {
+        GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReadyServerRpc();
     }
 
     public void parentReady() 
@@ -71,15 +80,30 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
+    private void onSceneLoad(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) 
+    {
+        if (sceneName == "JuegoPrincipal")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void onSceneUnload(ulong clientId, string sceneName, AsyncOperation asyncOperation) 
     {
-        Destroy(gameObject);
+        isSceneUnloading = true;
     }
 
 
     public override void OnNetworkDespawn()
     {
         //If ready was true decrease player count;
-        Destroy(selectorInfo);
+        if (!isSceneUnloading)
+        {
+            if (ready.Value)
+            {
+                GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
+            }
+            Destroy(selectorInfo);
+        }
     }
 }
