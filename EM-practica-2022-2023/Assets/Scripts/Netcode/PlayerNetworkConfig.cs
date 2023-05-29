@@ -8,12 +8,16 @@ namespace Netcode
     public class PlayerNetworkConfig : NetworkBehaviour
     {
         public GameObject characterPrefab;
+        [SerializeField] private VictoryConditions victoryConditions;
         
 
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
-            InstantiateCharacterServerRpc(OwnerClientId);   
+            InstantiateCharacterServerRpc(OwnerClientId); 
+            victoryConditions = FindObjectOfType<VictoryConditions>(); 
+            Debug.Log("hola"); 
+            victoryConditions.AddPlayerObject(this.gameObject);
         }
 
     

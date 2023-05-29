@@ -31,6 +31,7 @@ public class PlayerHealth : NetworkBehaviour
 
     void updateHealth(int previous,int current) 
     {
+        
         Health.Value = current;
         healthBar.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
         if (Health.Value <= 0 && (IsServer)) 

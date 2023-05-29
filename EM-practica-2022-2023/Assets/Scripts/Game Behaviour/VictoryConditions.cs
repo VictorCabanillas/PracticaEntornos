@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using Movement.Components;
+using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System.Threading;
 
@@ -11,7 +12,6 @@ public class VictoryConditions : NetworkBehaviour
 
     public NetworkVariable<int> alivePlayersRemaining = new NetworkVariable<int>(); //Jugadores que quedan vivos (Protegida)
     
-
     public NetworkVariable<bool> temporizadorEnMarcha = new NetworkVariable<bool>(true); //Variable para cuando se acabe el temporizador salte la pantalla de victoria correspondiente
 
     int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
@@ -19,8 +19,9 @@ public class VictoryConditions : NetworkBehaviour
 
     [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
     [SerializeField] GameObject timerPanel;
+    [SerializeField] int roundsNumber;
 
-   
+    public List<GameObject> playerObjectsList = new List<GameObject>();
 
     
 
@@ -39,13 +40,12 @@ public class VictoryConditions : NetworkBehaviour
         }       
     }
 
-    //Función en la que añadimos el número de personajes para pdoer trabajar con ello
+    //Funciï¿½n en la que aï¿½adimos el nï¿½mero de personajes para pdoer trabajar con ello
     private void addPlayer(ulong id)
     {
         playersInGame += 1;
-
         //TODO VER CUANDO ESTEN TODOS
-        if(playersInGame == 2) //En cuanto todos los personajes estén AQUI PASAMOS EL NUMERO DE JUGADORES QUE HAY EN EL JUEGO
+        if(playersInGame == 1) //En cuanto todos los personajes estï¿½n AQUI PASAMOS EL NUMERO DE JUGADORES QUE HAY EN EL JUEGO
         {
             ActivateTimePanelClientRpc(); //Activamos el temporizador
 
@@ -62,13 +62,13 @@ public class VictoryConditions : NetworkBehaviour
         }
     }
 
-    //Método para quitar personajes (a la variable)
+    //Mï¿½todo para quitar personajes (a la variable)
     private void removePlayer(ulong id)
     {
         playersInGame -= 1;
     }
 
-    //En caso de desconexión actualizamos la variables correspondiente llamando a los métodos necesarios
+    //En caso de desconexiï¿½n actualizamos la variables correspondiente llamando a los mï¿½todos necesarios
     public override void OnNetworkDespawn()
     {
         if (IsHost)
@@ -81,10 +81,10 @@ public class VictoryConditions : NetworkBehaviour
 
     }
 
-    //Aquí comprobamos cuantos jugadores quedan vivo/en partida, en caso de quedar uno se activa la condición de victoria
+    //Aquï¿½ comprobamos cuantos jugadores quedan vivo/en partida, en caso de quedar uno se activa la condiciï¿½n de victoria
     void CheckNumberOfAlivePlayers(int oldValue, int newValue)
     {
-        if(newValue == 0) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
+        if(newValue == 0) //AQUï¿½ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
             ActivateEndGameCanvasClientRpc();
         }
@@ -95,7 +95,7 @@ public class VictoryConditions : NetworkBehaviour
     {
         Debug.Log("VIEJO: " + oldValue);
         Debug.Log("Nuevo: " + newValue);
-        if (newValue == false) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
+        if (newValue == false) //AQUï¿½ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
             ActivateEndGameCanvasClientRpc();
 
@@ -114,7 +114,7 @@ public class VictoryConditions : NetworkBehaviour
     void ActivateEndGameCanvasClientRpc()
     {
         victoryPanel.SetActive(true);
-        timerPanel.SetActive(false); //Desactivamos la ceunta atrás ya que no nos interesa
+        timerPanel.SetActive(false); //Desactivamos la ceunta atrï¿½s ya que no nos interesa
 
         var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>(); //Buscamos el script de todos los personajes que se encarga de manejar el movimiento
         foreach (FighterMovement fighterMovement in fighterMovementOfPlayer) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
@@ -122,6 +122,7 @@ public class VictoryConditions : NetworkBehaviour
             fighterMovement.speed = 0;
             fighterMovement.jumpAmount = 0f;
         }
+        StartCoroutine(ReloadScene());
     }
 
     // Start is called before the first frame update
@@ -140,5 +141,26 @@ public class VictoryConditions : NetworkBehaviour
         }
        
         
+    }
+
+    public void AddPlayerObject(GameObject player){
+        Debug.Log("Voy a aÃ±adir al player: " + player);
+        playerObjectsList.Add(player);
+    }
+
+    public void RemovePlayerObject(GameObject player){
+        
+    }
+
+    IEnumerator ReloadScene(){
+    yield return new WaitForSeconds(4);
+    foreach (GameObject player in playerObjectsList) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
+    {
+        //AQUI HAY QUE ELIMINAR AL PLAYER, DA ERROR//Destroy(player.transform.GetChild(0).gameObject);
+    }
+    if(roundsNumber==0){
+        //SceneManager.LoadScene('SelectorPersonaje');
+    }
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
