@@ -18,6 +18,7 @@ public class AsociarBarras : NetworkBehaviour
     {
         if (IsClient)
         {
+            UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
             healthBar = UImanager.CrearBarras((int)OwnerClientId);
             GetComponent<PlayerHealth>().healthBar = healthBar;
         }

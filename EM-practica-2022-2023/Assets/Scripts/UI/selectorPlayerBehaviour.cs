@@ -45,7 +45,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsClient)
         {
             UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
+            //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
         }
         if (!IsOwner)
         {
@@ -73,6 +73,9 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     public void parentReady() 
     {
         parent = transform.parent.gameObject;
+        UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        Debug.Log(UImanager.playingServer);
+        selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
         if (selectorInfo != null)
         {

@@ -69,6 +69,7 @@ namespace UI
         }
         private void OnServerButtonClicked()
         {
+            PlayerPrefs.SetInt("playingServer", 1);
             NetworkManager.Singleton.StartServer();
         }
 
@@ -88,6 +89,7 @@ namespace UI
             }
             else
             {
+                PlayerPrefs.SetInt("playingServer", 0);
                 NetworkManager.Singleton.StartHost();
             }
         }

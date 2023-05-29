@@ -12,6 +12,7 @@ public class SpawningBehaviour : NetworkBehaviour
 
     public NetworkVariable<FixedString64Bytes> playerName = new NetworkVariable<FixedString64Bytes>(default,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
+    public bool playingServer = false;
     private void Start()
     {
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += sceneLoaded;
@@ -37,6 +38,7 @@ public class SpawningBehaviour : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        playingServer = PlayerPrefs.GetInt("playingServer") == 1 ? true : false;
         if (IsOwner)
         {
             playerName.Value = PlayerPrefs.GetString("playerName");
