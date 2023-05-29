@@ -27,7 +27,6 @@ public class SpawningBehaviour : NetworkBehaviour
         if (!IsOwner) return;
         if (sceneName == "SelectorPersonaje") 
         {
-            Debug.Log("Vamosa instanciar");
             InstantiateSelectorServerRpc(OwnerClientId);
         }
         if (sceneName == "JuegoPrincipal") 
@@ -40,12 +39,9 @@ public class SpawningBehaviour : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Debug.Log(OwnerClientId);
-            Debug.Log("Cliente entra a network Spawn");
             playerName.Value = PlayerPrefs.GetString("playerName");
             if (NetworkManager.Singleton.IsClient)
             {
-                Debug.Log("Cliente instancia");
                 InstantiateSelectorServerRpc(OwnerClientId);
             }
         }
@@ -71,7 +67,6 @@ public class SpawningBehaviour : NetworkBehaviour
     [ServerRpc]
     public void InstantiateSelectorServerRpc(ulong id)
     {
-        Debug.Log("Instanciamos");
         //GetComponent<selectorPlayerBehaviour>().enabled = true;
         GameObject characterGameObject = Instantiate(selectorPrefab,transform);
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);

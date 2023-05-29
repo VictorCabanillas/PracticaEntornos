@@ -63,3 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectorInfo: {fileID: 0}
   parent: {fileID: 0}
+  playersPrefabs:
+  - {fileID: 3010630682321582541, guid: 06b98e5343c113147985cd4116ac1cdb, type: 3}
+  - {fileID: 1279163059010513274, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
+  - {fileID: 7467422803991183054, guid: eefd1982948af6448a89a5714bb66417, type: 3}

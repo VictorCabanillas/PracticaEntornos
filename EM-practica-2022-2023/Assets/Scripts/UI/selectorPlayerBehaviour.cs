@@ -10,11 +10,29 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     public GameObject selectorInfo;
     public GameObject parent;
 
-    NetworkVariable<bool> ready = new NetworkVariable<bool>(false);
+    NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    NetworkVariable<int> selectedCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+
+    PlayerSelectorButtons selectorButtons;
+
+    public GameObject[] playersPrefabs;
 
     private void Awake()
     {
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
+        selectedCharacter.OnValueChanged += selectedCharacterChanged;
+        ready.OnValueChanged += playerReady;
+    }
+
+    public void selectedCharacterChanged(int previous, int current)
+    {
+        selectorInfo.GetComponent<PlayerSelectorInfo>().image.sprite = selectorInfo.GetComponent<PlayerSelectorInfo>().playerSprites[current];
+    }
+
+    public void playerReady(bool previous, bool current) 
+    {
+        Debug.Log("Readiness changed");
+        selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready";
     }
 
     public override void OnNetworkSpawn()
@@ -22,7 +40,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsClient)
         {
             UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId); //Aqui
+            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
         }
         if (!IsOwner)
         {
@@ -30,6 +48,16 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             {
                 parentReady();
             }
+        }
+        if (IsOwner) 
+        {
+            selectorButtons = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>();
+            selectorButtons?.huntressButton.onClick.AddListener(() => { selectedCharacter.Value = 0; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[0]; });
+            selectorButtons?.akaiKazeButton.onClick.AddListener(() => { selectedCharacter.Value = 1; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[1]; });
+            selectorButtons?.oniButton.onClick.AddListener(() => { selectedCharacter.Value = 2; transform.parent.GetComponent<SpawningBehaviour>().characterPrefab = playersPrefabs[2]; });
+            selectorButtons?.readyButton.onClick.AddListener(()=> { Debug.Log("readyButton pressed"); ready.Value = true; });
+
+            //NetworkManager.Singleton.GetComponent<>();
         }
     }
 
@@ -46,5 +74,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     private void onSceneUnload(ulong clientId, string sceneName, AsyncOperation asyncOperation) 
     {
         Destroy(gameObject);
+    }
+
+
+    public override void OnNetworkDespawn()
+    {
+        //If ready was true decrease player count;
+        Destroy(selectorInfo);
     }
 }
