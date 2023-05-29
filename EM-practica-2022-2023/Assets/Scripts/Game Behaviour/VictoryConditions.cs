@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using Movement.Components;
 using Unity.VisualScripting;
+using System.Threading;
 
 public class VictoryConditions : NetworkBehaviour
 {
@@ -11,13 +12,15 @@ public class VictoryConditions : NetworkBehaviour
     public NetworkVariable<int> alivePlayersRemaining = new NetworkVariable<int>(); //Jugadores que quedan vivos (Protegida)
     
 
-    public NetworkVariable<bool> temporizadorEnMarcha = new NetworkVariable<bool>(); //Variable para cuando se acabe el temporizador salte la pantalla de victoria correspondiente
+    public NetworkVariable<bool> temporizadorEnMarcha = new NetworkVariable<bool>(true); //Variable para cuando se acabe el temporizador salte la pantalla de victoria correspondiente
 
     int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
     public GameObject healthBar; //Para activar y desacticvar las barras de vida (Referencia)
 
     [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
     [SerializeField] GameObject timerPanel;
+
+   
 
     
 
@@ -28,7 +31,8 @@ public class VictoryConditions : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback += addPlayer;
             NetworkManager.Singleton.OnClientDisconnectCallback += removePlayer;
 
-           
+            temporizadorEnMarcha.Value = true;
+
             alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers; 
             temporizadorEnMarcha.OnValueChanged += CheckTemporizador;
 
@@ -89,9 +93,13 @@ public class VictoryConditions : NetworkBehaviour
 
     void CheckTemporizador(bool oldValue, bool newValue)
     {
+        Debug.Log("VIEJO: " + oldValue);
+        Debug.Log("Nuevo: " + newValue);
         if (newValue == false) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
             ActivateEndGameCanvasClientRpc();
+
+            
         }    
     }
 
@@ -125,6 +133,12 @@ public class VictoryConditions : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        temporizadorEnMarcha.Value = timerPanel.GetComponent<Timer>().enMarcha;
+
+        if (temporizadorEnMarcha.Value == true)
+        {
+            temporizadorEnMarcha.Value = timerPanel.GetComponent<Timer>().enMarcha;
+        }
+       
+        
     }
 }

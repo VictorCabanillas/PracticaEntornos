@@ -11,7 +11,7 @@ public class Timer : NetworkBehaviour
     [SerializeField] int min, seg;
     [SerializeField] TextMeshProUGUI tiempo;
 
-    public NetworkVariable<float> restante = new NetworkVariable<float>(10,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server); //Tiempo restante
+    public NetworkVariable<float> restante = new NetworkVariable<float>(); //Tiempo restante
     //public NetworkVariable<bool> enMarcha = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool enMarcha = true;
 
@@ -27,7 +27,7 @@ public class Timer : NetworkBehaviour
         
     }
 
-
+    
     
     public void UpdateClock(float previous, float current)
     {
