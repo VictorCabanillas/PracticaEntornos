@@ -39,6 +39,7 @@ public class PlayerHealth : NetworkBehaviour
             movement.speed = 0;
             movement.jumpAmount = 0;
             movement.Die();
+            //MIRAR AQUI PARA DESACTIVAR BARRA
             healthBar.gameObject.SetActive(false);
             
             victoryCondition.alivePlayersRemaining.Value -= 1;

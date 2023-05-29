@@ -8,10 +8,12 @@ using Movement.Components;
 public class VictoryConditions : NetworkBehaviour
 {
 
-    public NetworkVariable<int> alivePlayersRemaining = new NetworkVariable<int>();
-    int playersInGame = 0;
-    public GameObject healthBar;
-    [SerializeField] GameObject victoryPanel;
+    public NetworkVariable<int> alivePlayersRemaining = new NetworkVariable<int>(); //Jugadores que quedan vivos (Protegida)
+    int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
+    public GameObject healthBar; //Para activar y desacticvar las barras de vida (Referencia)
+    [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
+
+    [SerializeField] GameObject timerPanel;
 
     public override void OnNetworkSpawn()
     {
@@ -22,19 +24,24 @@ public class VictoryConditions : NetworkBehaviour
 
            
             alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers;
+
+            
         }       
     }
 
+    //Función en la que añadimos el número de personajes para pdoer trabajar con ello
     private void addPlayer(ulong id)
     {
         playersInGame += 1;
 
         //TODO VER CUANDO ESTEN TODOS
-        if(playersInGame == 3)
+        if(playersInGame == 1) //En cuanto todos los personajes estén
         {
-            alivePlayersRemaining.Value = playersInGame;
-            var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>();
-            foreach(FighterMovement fighterMovement in fighterMovementOfPlayer)
+            ActivateTimePanelClientRpc(); //Activamos el temporizador
+
+            alivePlayersRemaining.Value = playersInGame; //Asignamos el numero de jugador cogidos a la variable alive players
+            var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>(); //Buscamos el script de todos los personajes que se encarga de manejar el movimiento
+            foreach(FighterMovement fighterMovement in fighterMovementOfPlayer) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
             {
                 fighterMovement.speed = 3;
                 fighterMovement.jumpAmount = 1.2f;
@@ -44,11 +51,13 @@ public class VictoryConditions : NetworkBehaviour
         }
     }
 
+    //Método para quitar personajes (a la variable)
     private void removePlayer(ulong id)
     {
         playersInGame -= 1;
     }
 
+    //En caso de desconexión actualizamos la variables correspondiente llamando a los métodos necesarios
     public override void OnNetworkDespawn()
     {
         if (IsHost)
@@ -61,9 +70,10 @@ public class VictoryConditions : NetworkBehaviour
 
     }
 
+    //Aquí comprobamos cuantos jugadores quedan vivo/en partida, en caso de quedar uno se activa la condición de victoria
     void CheckNumberOfAlivePlayers(int oldValue, int newValue)
     {
-        if(newValue == 1)
+        if(newValue == 0)
         {
             ActivateEndGameCanvasClientRpc();
         }
@@ -71,6 +81,12 @@ public class VictoryConditions : NetworkBehaviour
         {
 
         }
+    }
+
+    [ClientRpc]
+    void ActivateTimePanelClientRpc()
+    {
+        timerPanel.SetActive(true);
     }
 
     [ClientRpc]
