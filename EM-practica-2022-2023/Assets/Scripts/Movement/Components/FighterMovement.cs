@@ -14,8 +14,8 @@ namespace Movement.Components
         public float jumpAmount = 1.0f;
 
         private Rigidbody2D _rigidbody2D;
-        private Animator _animator;
-        private NetworkAnimator _networkAnimator;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private NetworkAnimator _networkAnimator;
         private Transform _feet;
         private LayerMask _floor;
 
@@ -34,7 +34,7 @@ namespace Movement.Components
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
-            _networkAnimator = GetComponent<NetworkAnimator>();
+            _networkAnimator = GetComponent<NetworkAnimator>(); //Debería hacerse en el onSpawn del servidor porque esta generando problemas de nullPointer (lo hemos solucionado con SerializeField)
 
             _feet = transform.Find("Feet");
             _floor = LayerMask.GetMask("Floor");
@@ -64,15 +64,15 @@ namespace Movement.Components
         {
             JumpServerRpc(stage);
         }
-
+        
         public void Attack1()
         {
-            _networkAnimator.SetTrigger(AnimatorAttack1);
+            Attack1ServerRpc();
         }
 
         public void Attack2()
         {
-            _networkAnimator.SetTrigger(AnimatorAttack2);
+            Attack2ServerRpc();
         }
 
         public void TakeHit()
@@ -84,6 +84,7 @@ namespace Movement.Components
         {
             _networkAnimator.SetTrigger(AnimatorDie);
         }
+
     
     
         [ServerRpc]
@@ -116,5 +117,23 @@ namespace Movement.Components
                     break;
             }
         }
+
+
+
+
+        [ServerRpc]
+        public void Attack1ServerRpc()
+        {
+            _networkAnimator.SetTrigger(AnimatorAttack1);
+        }
+
+
+        [ServerRpc]
+        public void Attack2ServerRpc()
+        {
+            _networkAnimator.SetTrigger(AnimatorAttack2);
+        }
+
+        
     }
 }

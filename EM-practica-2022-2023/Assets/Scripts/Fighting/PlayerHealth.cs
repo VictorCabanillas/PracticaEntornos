@@ -21,22 +21,30 @@ public class PlayerHealth : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Health.OnValueChanged += updateHealth;
+        if (IsServer)
+        {
+            Health.Value = 100;
+            Health.OnValueChanged += updateHealth;
+        }
     }
 
     public override void OnNetworkDespawn()
     {
-        Health.Value = 0;
-        Health.OnValueChanged -= updateHealth;
+        if (IsServer) 
+        { 
+            Health.Value = 0;
+            Health.OnValueChanged -= updateHealth;
+        }
     }
-
+   
     void updateHealth(int previous,int current) 
     {
         Health.Value = current;
-        if(healthBar != null ) 
-        {
-            healthBar?.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
-        }
+        
+        
+
+            UpdateHealthBarClientRpc();
+        
         
         if (Health.Value <= 0 && (IsServer)) 
         {
@@ -45,15 +53,26 @@ public class PlayerHealth : NetworkBehaviour
             movement.jumpAmount = 0;
             movement.Die();
             //MIRAR AQUI PARA DESACTIVAR BARRA
-            healthBar.gameObject.SetActive(false);
+            
             
             victoryCondition.alivePlayersRemaining.Value -= 1;
-            Debug.Log("Jugadores restantes: " + victoryCondition.alivePlayersRemaining.Value);
+            
         }
     }
 
     public void DecreaseHealth(int amount) 
     {
         Health.Value -= amount;
+    }
+
+    [ClientRpc]
+    public void UpdateHealthBarClientRpc() 
+    {
+        healthBar.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
+        if(Health.Value <= 0)
+        {
+            healthBar.gameObject.SetActive(false);
+        }
+        
     }
 }

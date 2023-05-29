@@ -13,13 +13,11 @@ public class Timer : NetworkBehaviour
 
     public NetworkVariable<float> restante = new NetworkVariable<float>(); //Tiempo restante
     //public NetworkVariable<bool> enMarcha = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public bool enMarcha = true;
+    public bool enMarcha;
 
     private void Start()
     {
-        Debug.Log("START");
-        
-
+         this.GetComponent<CanvasGroup>().alpha = 0f;
          InstatiateClockServerRpc();
         
 
@@ -40,13 +38,10 @@ public class Timer : NetworkBehaviour
         {
             restante.Value = (min * 60) + seg;
         }
-        
 
         if (IsClient)
         {
-            Debug.Log("VALOR: " + restante.Value.ToString());
-            
-            
+            Debug.Log("VALOR: " + restante.Value.ToString());         
         }
        
     }
@@ -67,7 +62,7 @@ public class Timer : NetworkBehaviour
     private void LateUpdate()
     {
 
-        Debug.Log(IsServer);
+     
         if ((NetworkManager.Singleton.IsServer) && enMarcha)
         {
 

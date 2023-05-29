@@ -372,6 +372,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   jumpAmount: 0
+  _animator: {fileID: 7467422803991183055}
+  _networkAnimator: {fileID: -6799743399505791264}
 --- !u!114 &-199720293087525386
 MonoBehaviour:
   m_ObjectHideFlags: 0
