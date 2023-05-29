@@ -9,11 +9,12 @@ public class PlayerHealth : NetworkBehaviour
 {
     public NetworkVariable<int> Health = new NetworkVariable<int>();
     public GameObject healthBar;
-    private VictoryConditions victoryCondition = new VictoryConditions();   
+    private VictoryConditions victoryCondition;   
 
     // Start is called before the first frame update
     void Start()
     {
+
         victoryCondition = FindObjectOfType<VictoryConditions>();
 
     }
@@ -32,7 +33,11 @@ public class PlayerHealth : NetworkBehaviour
     void updateHealth(int previous,int current) 
     {
         Health.Value = current;
-        healthBar.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
+        if(healthBar != null ) 
+        {
+            healthBar?.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
+        }
+        
         if (Health.Value <= 0 && (IsServer)) 
         {
             FighterMovement movement = GetComponent<FighterMovement>();
