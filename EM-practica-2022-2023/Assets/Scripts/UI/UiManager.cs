@@ -9,18 +9,12 @@ namespace UI
         public GameObject _ui;
         public Vector3[] positions;
 
-        void Start()
-        {
-           
-        }
-
         public GameObject CrearBarras(int nPlayer)
         {
-            Debug.Log(nPlayer);
-            var playerUI = Instantiate(_ui);
-            playerUI.transform.SetParent(transform, false);
-            playerUI.transform.localPosition = positions[nPlayer];
-            return playerUI;
+            Vector3 position = positions[nPlayer] + transform.position;
+            GameObject objeto = Instantiate(_ui, position, _ui.transform.rotation);
+            objeto.transform.SetParent(transform);
+            return objeto;
         }
     }
 }

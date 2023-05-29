@@ -13,18 +13,6 @@ public class AsociarBarras : NetworkBehaviour
     {
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
     }
-<<<<<<< Updated upstream
-    // Start is called before the first frame update
-    void Start()
-    {
-        /*if (IsClient)
-        {
-            healthBar = UImanager.CrearBarras((int)OwnerClientId);
-            GetComponent<PlayerHealth>().healthBar = healthBar;
-        }*/
-    }
-=======
->>>>>>> Stashed changes
 
     public override void OnNetworkSpawn()
     {
