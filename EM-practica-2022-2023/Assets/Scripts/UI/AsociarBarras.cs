@@ -16,10 +16,24 @@ public class AsociarBarras : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsClient)
+        if (IsClient && !IsOwner)
         {
+<<<<<<< Updated upstream
             healthBar = UImanager.CrearBarras((int)OwnerClientId);
             GetComponent<PlayerHealth>().healthBar = healthBar;
         }
     }
+=======
+            crearBarras();
+        }
+    }
+
+    public void crearBarras() 
+    {
+        Debug.Log("Vamos a crear las barras de vida");
+        UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        healthBar = UImanager.CrearBarras((int)OwnerClientId);
+        GetComponent<PlayerHealth>().healthBar = healthBar;
+    }
+>>>>>>> Stashed changes
 }

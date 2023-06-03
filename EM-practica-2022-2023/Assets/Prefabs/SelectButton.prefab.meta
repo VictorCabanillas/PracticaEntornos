@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:EM-practica-2022-2023/Assets/Prefabs/SelectButton.prefab.meta
 guid: 829606f6fe8aa4b4e8c11ea5d773b45c
+========
+guid: 8bc228cb1624d8149b92aa7d1fae91ef
+>>>>>>>> Stashed changes:EM-practica-2022-2023/Assets/Prefabs/DebugPanel.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

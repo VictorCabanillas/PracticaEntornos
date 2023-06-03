@@ -303,3 +303,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+<<<<<<< Updated upstream
+=======
+--- !u!114 &5714207088050566608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7330279289346974000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b4fae698bd3bb4eb8b6569a6dc634b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vidaMaxima: 0
+  relleno: {fileID: 625954623215561510}
+  icono: {fileID: 0}
+  nombre: {fileID: 5984964747206061254}
+>>>>>>> Stashed changes

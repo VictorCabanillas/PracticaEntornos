@@ -13,18 +13,50 @@ public class Timer : NetworkBehaviour
 
     public NetworkVariable<float> restante = new NetworkVariable<float>(); //Tiempo restante
     //public NetworkVariable<bool> enMarcha = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public bool enMarcha = true;
+    public bool enMarcha;
 
     private void Start()
     {
+<<<<<<< Updated upstream
         
         restante.OnValueChanged += UpdateClock;
         restante.Value = (min * 60) + seg;
         if (NetworkManager.Singleton.IsServer)
+=======
+         this.GetComponent<CanvasGroup>().alpha = 0f;
+         InstatiateClockServerRpc();
+
+
+        restante.OnValueChanged += UpdateClock;
+    }
+
+    [ServerRpc]
+    public void InstatiateClockServerRpc()
+    {
+        if(!GetComponent<NetworkObject>().IsSpawned){
+        GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        }
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log("Entrando ONNETWORKSPAWN");
+
+        if(IsServer)
+>>>>>>> Stashed changes
         {
             NetworkObject.Spawn(this);
         }
+<<<<<<< Updated upstream
         
+=======
+
+        if (IsClient)
+        {
+            Debug.Log("VALOR: " + restante.Value.ToString());
+        }
+
+>>>>>>> Stashed changes
     }
 
     
@@ -42,7 +74,18 @@ public class Timer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+<<<<<<< Updated upstream
        if((NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsClient) && enMarcha)
+=======
+
+    }
+
+    private void LateUpdate()
+    {
+
+
+        if ((NetworkManager.Singleton.IsServer) && enMarcha)
+>>>>>>> Stashed changes
         {
             
             restante.Value -= Time.deltaTime;
