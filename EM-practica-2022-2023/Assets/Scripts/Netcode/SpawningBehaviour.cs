@@ -67,6 +67,7 @@ public class SpawningBehaviour : NetworkBehaviour
         characterGameObject.transform.SetParent(transform, false);
         characterGameObject.GetComponent<PlayerHealth>().Health.Value = 100;
         CreateBarClientRpc();
+        if (IsServer && !IsHost) { characterGameObject.GetComponent<SpriteRenderer>().enabled = false; }
     }
 
     [ServerRpc]

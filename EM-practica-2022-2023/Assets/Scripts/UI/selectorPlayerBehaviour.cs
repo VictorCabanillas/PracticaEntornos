@@ -13,6 +13,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     NetworkVariable<int> selectedCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> playerId = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
     PlayerSelectorButtons selectorButtons;
 
@@ -24,6 +25,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     private void Awake()
     {
+        
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
         selectedCharacter.OnValueChanged += selectedCharacterChanged;
@@ -32,7 +34,10 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public void selectedCharacterChanged(int previous, int current)
     {
-        selectorInfo.GetComponent<PlayerSelectorInfo>().image.sprite = selectorInfo.GetComponent<PlayerSelectorInfo>().playerSprites[current];
+        if (selectorInfo == null) return;
+        PlayerSelectorInfo player = selectorInfo.GetComponent<PlayerSelectorInfo>();
+        if (player != null) { player.image.sprite = player.playerSprites[current]; }
+        
     }
 
     public void playerReady(bool previous, bool current) 
@@ -45,6 +50,8 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
+
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
         //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
         if (!IsOwner)
@@ -77,7 +84,8 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsClient && spawnOneBar)
         {
             spawnOneBar = false;
-            selectorInfo = UImanager?.CrearBarras((int)OwnerClientId);
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this);
+            selectorInfo = UImanager?.CrearBarras(playerId.Value);
         }
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
         if (selectorInfo != null)
@@ -109,6 +117,9 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             {
                 GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
             }
+            UImanager.EliminarBarra(selectorInfo);
+            UImanager.DesplazarBarras();
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
             Destroy(selectorInfo);
         }
     }

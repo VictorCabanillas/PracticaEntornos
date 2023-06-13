@@ -486,6 +486,18 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &265292852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265292850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bf3e85fb2a0bc84cab97f13c5d9ccf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &293548649
 GameObject:
   m_ObjectHideFlags: 0
@@ -13849,6 +13861,10 @@ PrefabInstance:
       propertyPath: timerPanel
       value: 
       objectReference: {fileID: 265292850}
+    - target: {fileID: 8997806532191336475, guid: 0efbe56922fc92e46bd1be3c15f21366, type: 3}
+      propertyPath: winningText
+      value: 
+      objectReference: {fileID: 1276582446}
     - target: {fileID: 8997806532191336475, guid: 0efbe56922fc92e46bd1be3c15f21366, type: 3}
       propertyPath: victoryPanel
       value: 

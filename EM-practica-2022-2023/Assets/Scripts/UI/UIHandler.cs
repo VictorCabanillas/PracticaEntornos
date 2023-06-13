@@ -47,11 +47,15 @@ namespace UI
             IpSelected = IP.text;
             PortSelected = Port.text;
             PortSelected = PortSelected.Remove(PortSelected.Length - 1, 1);
+            IpSelected = IpSelected.Remove(IpSelected.Length - 1, 1);
 
-            UnityTransport.ConnectionAddressData connection = NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData;
-            connection.Address = IpSelected;
-            connection.Port = ushort.Parse(PortSelected);
-            connection.ServerListenAddress="0.0.0.0";
+            Debug.Log(IpSelected.Length + " " +PortSelected.Length);
+            if(!string.IsNullOrWhiteSpace(IpSelected)) NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Address = IpSelected;
+            if(!string.IsNullOrWhiteSpace(PortSelected)) NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(PortSelected);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.ServerListenAddress = "0.0.0.0";
+
+           
+            
         }
 
         private void OnHostButtonClicked()
@@ -104,7 +108,8 @@ namespace UI
         }
         private void OnDisable()
         {
-            NetworkManager.Singleton.OnServerStarted -= loadScene;
+            if(NetworkManager.Singleton != null) NetworkManager.Singleton.OnServerStarted -= loadScene;
+
         }
     }
 }

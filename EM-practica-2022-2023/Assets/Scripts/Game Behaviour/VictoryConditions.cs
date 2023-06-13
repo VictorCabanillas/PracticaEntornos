@@ -6,6 +6,7 @@ using Unity.Netcode;
 using Movement.Components;
 using Unity.VisualScripting;
 using System.Threading;
+using TMPro;
 
 public class VictoryConditions : NetworkBehaviour
 {
@@ -20,6 +21,7 @@ public class VictoryConditions : NetworkBehaviour
 
     [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
     [SerializeField] GameObject timerPanel;
+    [SerializeField] TextMeshProUGUI winningText;
 
 
 
@@ -60,8 +62,8 @@ public class VictoryConditions : NetworkBehaviour
                 fighterMovement.jumpAmount = 1.2f;
             }
 
-            //emepzar a moverse
 
+            
         }
     }
 
@@ -125,6 +127,8 @@ public class VictoryConditions : NetworkBehaviour
     [ClientRpc]
     void ActivateEndGameCanvasClientRpc()
     {
+        SpawningBehaviour lastPlayer = FindObjectOfType<SpawningBehaviour>();
+        winningText.text = lastPlayer.playerName.Value.ToString() + " GANA!";
         victoryPanel.SetActive(true);
         timerPanel.GetComponent<CanvasGroup>().alpha = 0f; //Desactivamos la ceunta atrás ya que no nos interesa
 
