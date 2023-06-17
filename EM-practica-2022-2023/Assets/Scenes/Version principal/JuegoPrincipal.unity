@@ -13689,6 +13689,14 @@ PrefabInstance:
       value: 4275407802
       objectReference: {fileID: 0}
     - target: {fileID: 3873044328541492867, guid: f65bc2ae803ca87419e56924ee618e8a, type: 3}
+      propertyPath: min
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873044328541492867, guid: f65bc2ae803ca87419e56924ee618e8a, type: 3}
+      propertyPath: seg
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3873044328541492867, guid: f65bc2ae803ca87419e56924ee618e8a, type: 3}
       propertyPath: enMarcha
       value: 0
       objectReference: {fileID: 0}

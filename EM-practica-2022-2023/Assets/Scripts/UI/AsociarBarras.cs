@@ -25,7 +25,10 @@ public class AsociarBarras : NetworkBehaviour
     public void crearBarras() 
     {
         Debug.Log("Vamos a crear las barras de vida");
-        UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        if (transform.parent != null)
+        {
+            UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer; //Peta aqui null reference
+        }
         healthBar = UImanager.CrearBarras((int)OwnerClientId);
         GetComponent<PlayerHealth>().healthBar = healthBar;
     }

@@ -82,8 +82,10 @@ public class SpawningBehaviour : NetworkBehaviour
     [ClientRpc]
     public void CreateBarClientRpc()
     {
-        transform.GetChild(0).GetComponent<AsociarBarras>()?.crearBarras();
-        transform.GetChild(1).GetComponent<AsociarBarras>()?.crearBarras();
+        for (int i = 0; i < transform.childCount; i++) 
+        {
+            transform.GetChild(i).GetComponent<AsociarBarras>()?.crearBarras();
+        }
     }
 
     [ClientRpc]

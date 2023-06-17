@@ -140,9 +140,9 @@ public class VictoryConditions : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        temporizadorEnMarcha.Value = timerPanel.GetComponent<Timer>().enMarcha;
-
-
+        if (IsServer)
+        {
+            temporizadorEnMarcha.Value = timerPanel.GetComponent<Timer>().enMarcha;
+        }
     }
 }

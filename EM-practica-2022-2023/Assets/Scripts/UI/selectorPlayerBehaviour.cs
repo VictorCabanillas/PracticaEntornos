@@ -28,16 +28,14 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
         NetworkManager.Singleton.SceneManager.OnUnload += onSceneUnload;
-        selectedCharacter.OnValueChanged += selectedCharacterChanged;
-        ready.OnValueChanged += playerReady;
+        
     }
 
     public void selectedCharacterChanged(int previous, int current)
     {
         if (selectorInfo == null) return;
         PlayerSelectorInfo player = selectorInfo.GetComponent<PlayerSelectorInfo>();
-        if (player != null) { player.image.sprite = player.playerSprites[current]; }
-        
+        if (player != null) { player.image.sprite = player.playerSprites[current]; } 
     }
 
     public void playerReady(bool previous, bool current) 
@@ -56,8 +54,9 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        selectedCharacter.OnValueChanged += selectedCharacterChanged;
+        ready.OnValueChanged += playerReady;
 
-        
 
         //if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
         if (IsOwner) 
@@ -98,15 +97,18 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         if (IsClient && spawnOneBar)
         {
-            Debug.Log("Se ejecuta el if del selcetor");
             spawnOneBar = false;
             selectorInfo = UImanager?.CrearBarras(playerId.Value);
         }
         
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
+
         if (selectorInfo != null)
         {
             selectorInfo.GetComponent<PlayerSelectorInfo>().playerName.text = text;
+            PlayerSelectorInfo player = selectorInfo.GetComponent<PlayerSelectorInfo>();
+            if (player != null) { player.image.sprite = player.playerSprites[selectedCharacter.Value]; }
+            if (ready.Value) { selectorInfo.GetComponent<PlayerSelectorInfo>().playerReady.text = "Ready"; }
         }
     }
 
@@ -116,6 +118,9 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         {
             if (gameObject != null)
             {
+                NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
+                selectedCharacter.OnValueChanged -= selectedCharacterChanged;
+                ready.OnValueChanged -= playerReady;
                 Destroy(gameObject);
             }
         }
@@ -139,9 +144,13 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             UImanager.EliminarBarra(selectorInfo);
             UImanager.DesplazarBarras();
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
+            selectedCharacter.OnValueChanged -= selectedCharacterChanged;
+            ready.OnValueChanged -= playerReady;
             FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect(playerId.Value);
             FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
             Destroy(selectorInfo);
         }
+
+
     }
 }

@@ -18,14 +18,13 @@ public class Timer : NetworkBehaviour
     private void Start()
     {
          this.GetComponent<CanvasGroup>().alpha = 0f;
-         InstatiateClockServerRpc();
-
+         //InstatiateClockServerRpc();
 
         restante.OnValueChanged += UpdateClock;
     }
 
     [ServerRpc]
-    public void InstatiateClockServerRpc()
+    public void InstatiateClockServerRpc() //Peta aqui
     {
         if(!GetComponent<NetworkObject>().IsSpawned){
         GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
