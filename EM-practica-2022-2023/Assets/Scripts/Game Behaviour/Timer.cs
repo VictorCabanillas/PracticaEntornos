@@ -34,7 +34,6 @@ public class Timer : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Entrando ONNETWORKSPAWN");
 
         if(IsServer)
         {

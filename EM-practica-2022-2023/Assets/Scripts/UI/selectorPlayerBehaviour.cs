@@ -51,8 +51,6 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     [ServerRpc]
     public void ChangePlayerIDValueServerRpc()
     {
-
-        Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
         playerId.Value = NetworkManager.Singleton.ConnectedClients.Count;
     }
 
@@ -116,7 +114,10 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     {
         if (sceneName == "JuegoPrincipal")
         {
-            Destroy(gameObject);
+            if (gameObject != null)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -137,7 +138,8 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             }
             UImanager.EliminarBarra(selectorInfo);
             UImanager.DesplazarBarras();
-            FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect();
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect(playerId.Value);
             FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
             Destroy(selectorInfo);
         }

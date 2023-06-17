@@ -14,16 +14,12 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
         
     }
 
-    private void ProcessPlayerId()
+    private void ProcessPlayerId(int playerDisconnectedID)
     {
-        Debug.Log("hola");
-        Debug.Log(listaSelectorPlayer.Count);
         foreach (var player in listaSelectorPlayer)
         {
-            Debug.Log("Entrando al foreach");
-            if(player != null)
+            if(player != null && player.playerId.Value>playerDisconnectedID)
             {
-                Debug.Log("ENTRANDO AL IF");
                 //player.playerId.Value--;
                 player.playerId.Value = player.playerId.Value - 1;
             }
@@ -36,11 +32,13 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
         playerCount.Value = playerCount.Value + 1;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void PlayerDisconectServerRpc()
+    public void PlayerDisconect(int playerDisconectedID)
     {
-        playerCount.Value = playerCount.Value - 1;
-        ProcessPlayerId();
+        if (IsServer)
+        {
+            playerCount.Value = playerCount.Value - 1;
+            ProcessPlayerId(playerDisconectedID);
+        }
     }
 
     public void PlayerConect()
@@ -48,10 +46,6 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
         PlayerConectServerRpc();
     }
 
-    public void PlayerDisconect()
-    {
-        PlayerDisconectServerRpc();
-    }
 
     private void Update()
     {

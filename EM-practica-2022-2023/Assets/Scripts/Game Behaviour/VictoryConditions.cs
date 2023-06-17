@@ -46,7 +46,6 @@ public class VictoryConditions : NetworkBehaviour
     private void addPlayer(ulong id, string sceneName, LoadSceneMode mode)
     {
         playersInGame += 1;
-        Debug.Log("Add player se ha ejecutado" + playersInGame);
         //TODO VER CUANDO ESTEN TODOS
         if (playersInGame == NetworkManager.Singleton.ConnectedClients.Count) //En cuanto todos los personajes estén AQUI PASAMOS EL NUMERO DE JUGADORES QUE HAY EN EL JUEGO
         {
@@ -99,8 +98,6 @@ public class VictoryConditions : NetworkBehaviour
 
     void CheckTemporizador(bool oldValue, bool newValue)
     {
-        Debug.Log("VIEJO: " + oldValue);
-        Debug.Log("Nuevo: " + newValue);
         if (newValue == false) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
 

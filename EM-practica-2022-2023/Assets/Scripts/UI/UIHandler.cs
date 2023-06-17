@@ -49,7 +49,6 @@ namespace UI
             PortSelected = PortSelected.Remove(PortSelected.Length - 1, 1);
             IpSelected = IpSelected.Remove(IpSelected.Length - 1, 1);
 
-            Debug.Log(IpSelected.Length + " " +PortSelected.Length);
             if(!string.IsNullOrWhiteSpace(IpSelected)) NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Address = IpSelected;
             if(!string.IsNullOrWhiteSpace(PortSelected)) NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.Port = ushort.Parse(PortSelected);
             NetworkManager.Singleton.GetComponent<UnityTransport>().ConnectionData.ServerListenAddress = "0.0.0.0";
