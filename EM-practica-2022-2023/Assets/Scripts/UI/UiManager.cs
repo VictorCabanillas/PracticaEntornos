@@ -10,7 +10,7 @@ namespace UI
     {
         public GameObject _ui;
         public Vector3[] positions;
-        public bool playingServer=false;
+        public bool playingServer = false;
         
 
         private List<GameObject> barras = new List<GameObject>();
@@ -31,7 +31,7 @@ namespace UI
            for(int i = 0; i < barras.Count; i++)
             {
                 barras[i].transform.localPosition = positions[i];
-                Debug.Log(positions[i]);
+                //Debug.Log(positions[i]);
             }
         }
 

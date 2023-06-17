@@ -43,7 +43,7 @@ public class Timer : NetworkBehaviour
 
         if (IsClient)
         {
-            Debug.Log("VALOR: " + restante.Value.ToString());
+            //Debug.Log("VALOR: " + restante.Value.ToString());
         }
 
     }
@@ -68,7 +68,7 @@ public class Timer : NetworkBehaviour
         if ((NetworkManager.Singleton.IsServer) && enMarcha)
         {
 
-            Debug.Log("ENTRANDO ACAAAAAAAAA");
+            //Debug.Log("ENTRANDO ACAAAAAAAAA");
             restante.Value -= Time.deltaTime;
             if (restante.Value < 1)
             {

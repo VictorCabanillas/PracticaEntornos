@@ -13,7 +13,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     NetworkVariable<int> selectedCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
-    public NetworkVariable<int> playerId = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    public NetworkVariable<int> playerId = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server);
 
     PlayerSelectorButtons selectorButtons;
 
@@ -48,10 +48,26 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
+    [ServerRpc]
+    public void ChangePlayerIDValueServerRpc()
+    {
+
+        Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
+        playerId.Value = NetworkManager.Singleton.ConnectedClients.Count;
+    }
+
     public override void OnNetworkSpawn()
     {
-        if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
 
+        
+
+        //if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
+        if (IsOwner) 
+        {
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerConect();
+            ChangePlayerIDValueServerRpc();
+        }
+        
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
         //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
         if (!IsOwner)
@@ -80,11 +96,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     public void parentReady() 
     {
         parent = transform.parent.gameObject;
-        UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        //UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
         if (IsClient && spawnOneBar)
         {
+            Debug.Log("Se ejecuta el if del selcetor");
             spawnOneBar = false;
-            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this);
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
             selectorInfo = UImanager?.CrearBarras(playerId.Value);
         }
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
@@ -119,6 +136,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             }
             UImanager.EliminarBarra(selectorInfo);
             UImanager.DesplazarBarras();
+            FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect();
             FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
             Destroy(selectorInfo);
         }
