@@ -11,22 +11,17 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
 
     private void Awake()
     {
-
-        playerCount.OnValueChanged += ProcessPlayerIdServerRpc;
         
     }
 
-
-    [ServerRpc(RequireOwnership = false)]
-    private void ProcessPlayerIdServerRpc(int previous, int current)
+    private void ProcessPlayerId()
     {
         Debug.Log("hola");
         Debug.Log(listaSelectorPlayer.Count);
         foreach (var player in listaSelectorPlayer)
         {
-            Debug.Log(current);
             Debug.Log("Entrando al foreach");
-            if(player != null && player.playerId.Value > current)
+            if(player != null)
             {
                 Debug.Log("ENTRANDO AL IF");
                 //player.playerId.Value--;
@@ -45,6 +40,7 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
     public void PlayerDisconectServerRpc()
     {
         playerCount.Value = playerCount.Value - 1;
+        ProcessPlayerId();
     }
 
     public void PlayerConect()

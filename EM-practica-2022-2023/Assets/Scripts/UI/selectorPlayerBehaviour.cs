@@ -97,13 +97,14 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     {
         parent = transform.parent.gameObject;
         //UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
+        FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         if (IsClient && spawnOneBar)
         {
             Debug.Log("Se ejecuta el if del selcetor");
             spawnOneBar = false;
-            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
             selectorInfo = UImanager?.CrearBarras(playerId.Value);
         }
+        
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
         if (selectorInfo != null)
         {
