@@ -18,6 +18,7 @@ public class BarraDeVida : MonoBehaviour
         //vidaActual = player.GetComponent<>().GetVida();
         //Debug.Log("Cambiar valor barra");
         GetComponent<Image>().fillAmount = current / vidaMaxima;
+        Debug.Log(current);
         Debug.Log("Cambiar valor barra");
         relleno.GetComponent<Image>().fillAmount = current / vidaMaxima;
     }

@@ -430,8 +430,8 @@ MonoBehaviour:
   positions:
   - {x: -220, y: 200, z: 0}
   - {x: 220, y: 200, z: 0}
-  - {x: -220, y: 200, z: 0}
-  - {x: 220, y: 200, z: 0}
+  - {x: -220, y: -200, z: 0}
+  - {x: 220, y: -200, z: 0}
   playingServer: 0
 --- !u!1 &255086533
 GameObject:

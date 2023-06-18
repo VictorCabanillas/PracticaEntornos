@@ -7,7 +7,7 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
 {
     NetworkVariable<int> playerCount = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     
-    public List<selectorPlayerBehaviour> listaSelectorPlayer = new List<selectorPlayerBehaviour>();
+    public List<SpawningBehaviour> listaSelectorPlayer = new List<SpawningBehaviour>();
 
     private void Awake()
     {

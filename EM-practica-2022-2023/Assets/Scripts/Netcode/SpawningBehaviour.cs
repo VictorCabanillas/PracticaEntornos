@@ -11,6 +11,8 @@ public class SpawningBehaviour : NetworkBehaviour
     public GameObject[] characters;
     public GameObject selectorPrefab;
 
+    public NetworkVariable<int> playerId = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server);
+
     public NetworkVariable<FixedString64Bytes> playerName = new NetworkVariable<FixedString64Bytes>(default,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
     public bool playingServer = false;
@@ -57,6 +59,12 @@ public class SpawningBehaviour : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkDespawn()
+    {
+        FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect(playerId.Value);
+        FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
+    }
+
 
     [ServerRpc]
     public void InstantiateCharacterServerRpc(ulong id, int characterNum)
@@ -76,6 +84,7 @@ public class SpawningBehaviour : NetworkBehaviour
         GameObject characterGameObject = Instantiate(selectorPrefab,transform);
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         characterGameObject.transform.SetParent(transform, false); //Esto ocurre despues
+        characterGameObject.GetComponent<selectorPlayerBehaviour>().ChangePlayerIDValue();
         UpdateNameClientRpc();
     }
 

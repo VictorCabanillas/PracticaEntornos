@@ -14,13 +14,13 @@ public class AsociarBarras : NetworkBehaviour
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        if (IsClient && !IsOwner)
-        {
-            crearBarras();
-        }
-    }
+    //public override void OnNetworkSpawn()
+    //{
+    //    if (IsClient && !IsOwner)
+    //    {
+    //        crearBarras();
+    //    }
+    //}
 
     public void crearBarras() 
     {
@@ -29,7 +29,7 @@ public class AsociarBarras : NetworkBehaviour
         {
             UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer; //Peta aqui null reference
         }
-        healthBar = UImanager.CrearBarras((int)OwnerClientId);
+        healthBar = UImanager.CrearBarras(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value - 1);
         GetComponent<PlayerHealth>().healthBar = healthBar;
     }
 }

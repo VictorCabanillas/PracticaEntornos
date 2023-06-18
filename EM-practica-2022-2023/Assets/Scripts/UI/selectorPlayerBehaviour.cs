@@ -13,7 +13,6 @@ public class selectorPlayerBehaviour : NetworkBehaviour
 
     NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     NetworkVariable<int> selectedCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
-    public NetworkVariable<int> playerId = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Server);
 
     PlayerSelectorButtons selectorButtons;
 
@@ -46,10 +45,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    public void ChangePlayerIDValueServerRpc()
+    public void ChangePlayerIDValue()
     {
-        playerId.Value = NetworkManager.Singleton.ConnectedClients.Count;
+
+        Debug.Log("He entrado!");
+        transform.parent.GetComponent<SpawningBehaviour>().playerId.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
     }
 
     public override void OnNetworkSpawn()
@@ -62,7 +63,6 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsOwner) 
         {
             FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerConect();
-            ChangePlayerIDValueServerRpc();
         }
         
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
@@ -94,11 +94,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     {
         parent = transform.parent.gameObject;
         //UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer;
-        FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(this); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+        FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Add(transform.parent.GetComponent<SpawningBehaviour>()); //MIRAR AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         if (IsClient && spawnOneBar)
         {
             spawnOneBar = false;
-            selectorInfo = UImanager?.CrearBarras(playerId.Value);
+            Debug.Log(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value);
+            selectorInfo = UImanager?.CrearBarras(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value);
         }
         
         string text = parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString();
@@ -140,14 +141,12 @@ public class selectorPlayerBehaviour : NetworkBehaviour
             if (ready.Value)
             {
                 GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
-            }
+            }           
             UImanager.EliminarBarra(selectorInfo);
             UImanager.DesplazarBarras();
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
             selectedCharacter.OnValueChanged -= selectedCharacterChanged;
             ready.OnValueChanged -= playerReady;
-            FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerDisconect(playerId.Value);
-            FindObjectOfType<PlayerSelectorBehaviourHandler>().listaSelectorPlayer.Remove(this);
             Destroy(selectorInfo);
         }
 

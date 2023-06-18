@@ -124,7 +124,18 @@ public class VictoryConditions : NetworkBehaviour
     [ClientRpc]
     void ActivateEndGameCanvasClientRpc()
     {
-        SpawningBehaviour lastPlayer = FindObjectOfType<SpawningBehaviour>();
+        SpawningBehaviour[] spawninBehaviourArray = FindObjectsOfType<SpawningBehaviour>();
+        SpawningBehaviour lastPlayer = spawninBehaviourArray[0];
+        foreach(var x in spawninBehaviourArray)
+        {
+            if(x.transform.childCount>0)
+            {
+                if(lastPlayer.GetComponentInChildren<PlayerHealth>().Health.Value < x.GetComponentInChildren<PlayerHealth>().Health.Value)
+                {
+                    lastPlayer = x;
+                }
+            }
+        }
         winningText.text = lastPlayer.playerName.Value.ToString() + " GANA!";
         victoryPanel.SetActive(true);
         timerPanel.GetComponent<CanvasGroup>().alpha = 0f; //Desactivamos la ceunta atrás ya que no nos interesa

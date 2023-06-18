@@ -11,6 +11,8 @@ public class PlayerHealth : NetworkBehaviour
     public GameObject healthBar;
     private VictoryConditions victoryCondition;   
 
+    bool isAlive = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,20 +34,20 @@ public class PlayerHealth : NetworkBehaviour
 
     void updateHealth(int previous,int current) 
     {
-        Health.Value = current;
         if(healthBar != null ) 
         {
-            healthBar?.GetComponentInChildren<BarraDeVida>().CambiarBarra(Health.Value);
+            healthBar?.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
         }
         
-        if (Health.Value <= 0 && (IsServer)) 
+        if (Health.Value <= 0 && (IsServer) && isAlive) 
         {
+            isAlive = false;
             FighterMovement movement = GetComponent<FighterMovement>();
             movement.speed = 0;
             movement.jumpAmount = 0;
             movement.Die();
             //MIRAR AQUI PARA DESACTIVAR BARRA
-            healthBar.gameObject.SetActive(false);
+            //healthBar.gameObject.SetActive(false);
             
             victoryCondition.alivePlayersRemaining.Value -= 1;
             Debug.Log("Jugadores restantes: " + victoryCondition.alivePlayersRemaining.Value);

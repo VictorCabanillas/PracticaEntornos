@@ -37,10 +37,9 @@ public class AllPlayerReady : NetworkBehaviour
     [ClientRpc]
     public void activateStartButtonClientRpc() 
     {
-        selectorPlayerBehaviour[] playersIDS = FindObjectsOfType<selectorPlayerBehaviour>();
-        foreach (selectorPlayerBehaviour p in playersIDS)
+        SpawningBehaviour[] playersIDS = FindObjectsOfType<SpawningBehaviour>();
+        foreach (SpawningBehaviour p in playersIDS)
         {
-            Debug.Log(p.playerId.Value);
             if (p.IsOwner && p.playerId.Value == 1)
             {
                 Button startButton = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>().startButton;

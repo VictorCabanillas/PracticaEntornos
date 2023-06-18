@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b4fae698bd3bb4eb8b6569a6dc634b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidaMaxima: 0
+  vidaMaxima: 100
   relleno: {fileID: 625954623215561510}
   icono: {fileID: 0}
   nombre: {fileID: 5984964747206061254}
