@@ -16,7 +16,7 @@ public class VictoryConditions : NetworkBehaviour
 
     public NetworkVariable<bool> temporizadorEnMarcha = new NetworkVariable<bool>(false); //Variable para cuando se acabe el temporizador salte la pantalla de victoria correspondiente
 
-    int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
+    public int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
     //public GameObject healthBar; //Para activar y desacticvar las barras de vida (Referencia)
 
     [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
@@ -38,6 +38,10 @@ public class VictoryConditions : NetworkBehaviour
 
             
             temporizadorEnMarcha.OnValueChanged += CheckTemporizador;
+            if(IsServer)
+            {
+                playersInGame--;
+            }
 
         }
     }
@@ -71,6 +75,10 @@ public class VictoryConditions : NetworkBehaviour
     private void removePlayer(ulong id)
     {
         playersInGame -= 1;
+        if(playersInGame == 1)
+        {
+            ActivateEndGameCanvasClientRpc();
+        }
     }
 
     //En caso de desconexión actualizamos la variables correspondiente llamando a los métodos necesarios
