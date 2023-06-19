@@ -13,7 +13,6 @@ public class AllPlayerReady : NetworkBehaviour
     public void playerIsReady() 
     {
         playerReady += 1;
-        
         if (playerReady == NetworkManager.Singleton.ConnectedClients.Count && NetworkManager.Singleton.ConnectedClients.Count > 1) 
         {
             activateStartButtonClientRpc();
@@ -55,13 +54,16 @@ public class AllPlayerReady : NetworkBehaviour
     [ClientRpc]
     public void deactivateStartButtonClientRpc()
     {
-        if (OwnerClientId == 0)
+        SpawningBehaviour[] playersIDS = FindObjectsOfType<SpawningBehaviour>();
+        foreach (SpawningBehaviour p in playersIDS)
         {
-            Button startButton = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>().startButton;
-            startButton.gameObject.SetActive(false);
-            startButton.onClick.RemoveAllListeners();
+            if (p.IsOwner && p.playerId.Value == 1)
+            {
+                Button startButton = GameObject.FindGameObjectWithTag("Canvas").transform.GetChild(0).GetComponent<PlayerSelectorButtons>().startButton;
+                startButton.gameObject.SetActive(false);
+                startButton.onClick.RemoveAllListeners();
+            }
         }
-
     }
 
 

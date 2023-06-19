@@ -14,22 +14,11 @@ public class AsociarBarras : NetworkBehaviour
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
     }
 
-    //public override void OnNetworkSpawn()
-    //{
-    //    if (IsClient && !IsOwner)
-    //    {
-    //        crearBarras();
-    //    }
-    //}
-
     public void crearBarras() 
     {
         Debug.Log("Vamos a crear las barras de vida");
-        if (transform.parent != null)
-        {
-            UImanager.playingServer = transform.parent.GetComponent<SpawningBehaviour>().playingServer; //Peta aqui null reference
-        }
         healthBar = UImanager.CrearBarras(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value - 1);
+        healthBar.GetComponent<BarraDeVida>().SetNombre(transform.parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString());
         GetComponent<PlayerHealth>().healthBar = healthBar;
     }
 }

@@ -8,8 +8,11 @@ public class CameraBoundaries : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
- 
-        FindObjectOfType<CinemachineConfiner>().m_BoundingShape2D = GetComponent<PolygonCollider2D>();
+        CinemachineConfiner cameraController = FindObjectOfType<CinemachineConfiner>();
+        CinemachineVirtualCameraBase virtualCamera = (CinemachineVirtualCameraBase)CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
+        virtualCamera.PreviousStateIsValid = false;
+        cameraController.m_BoundingShape2D = GetComponent<PolygonCollider2D>();
+        cameraController.InvalidatePathCache();
     }
 
    

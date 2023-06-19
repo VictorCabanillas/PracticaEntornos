@@ -28,9 +28,24 @@ public class PlayerHealth : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        Health.Value = 0;
+        //Health.Value = 0;
+        //healthBar.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
+        //victoryCondition.alivePlayersRemaining.Value -= 1;
+        //isAlive = false;
+        if (IsOwner)
+        {
+            Debug.Log("Aviso me marcho");
+            victoryCondition.playerDisconnectedServerRpc();
+            Debug.Log("Ya hice la rpc");
+        }
+        if (healthBar != null)
+        {
+            healthBar?.GetComponent<BarraDeVida>()?.CambiarBarra(0);
+        }
         Health.OnValueChanged -= updateHealth;
     }
+
+    
 
     void updateHealth(int previous,int current) 
     {
@@ -62,4 +77,13 @@ public class PlayerHealth : NetworkBehaviour
     public int GetVida(){
         return Health.Value;
     }
+
+    /*private void OnApplicationQuit()
+    {
+        Health.Value = 0;
+        isAlive = false;
+        healthBar.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
+        victoryCondition.alivePlayersRemaining.Value -= 1;
+        Health.OnValueChanged -= updateHealth;
+    }*/
 }

@@ -36,7 +36,7 @@ public class VictoryConditions : NetworkBehaviour
 
             temporizadorEnMarcha.Value = false;
 
-            alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers;
+            
             temporizadorEnMarcha.OnValueChanged += CheckTemporizador;
 
         }
@@ -54,6 +54,7 @@ public class VictoryConditions : NetworkBehaviour
             ActivateTimePanelClientRpc(); //Activamos el temporizador
 
             alivePlayersRemaining.Value = playersInGame; //Asignamos el numero de jugador cogidos a la variable alive players
+            alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers;
             var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>(); //Buscamos el script de todos los personajes que se encarga de manejar el movimiento
             foreach (FighterMovement fighterMovement in fighterMovementOfPlayer) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
             {
@@ -88,6 +89,7 @@ public class VictoryConditions : NetworkBehaviour
     //Aquí comprobamos cuantos jugadores quedan vivo/en partida, en caso de quedar uno se activa la condición de victoria
     void CheckNumberOfAlivePlayers(int oldValue, int newValue)
     {
+        Debug.Log(newValue);
         if (newValue == 1) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
             timerPanel.GetComponent<Timer>().enMarcha = false;
@@ -111,6 +113,14 @@ public class VictoryConditions : NetworkBehaviour
             }
 
         }
+    }
+
+
+    [ServerRpc]
+    public void playerDisconnectedServerRpc()
+    {
+        Debug.Log("Jugadores restantes vivos antes de desconectar: " + alivePlayersRemaining.Value);
+        alivePlayersRemaining.Value--;
     }
 
 

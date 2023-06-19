@@ -62,6 +62,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         //if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
         if (IsOwner) 
         {
+            newPlayerConnectedServerRpc();
             FindObjectOfType<PlayerSelectorBehaviourHandler>().PlayerConect();
         }
         
@@ -88,6 +89,11 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     public void playerReadyServerRpc() 
     {
         GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReady();
+    }
+    [ServerRpc]
+    public void newPlayerConnectedServerRpc()
+    {
+        GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().deactivateStartButtonClientRpc();
     }
 
     public void parentReady() 

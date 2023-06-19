@@ -82,7 +82,7 @@ namespace Movement.Components
 
         public void Die()
         {
-            _networkAnimator.SetTrigger(AnimatorDie);
+            _networkAnimator?.SetTrigger(AnimatorDie);
         }
 
     

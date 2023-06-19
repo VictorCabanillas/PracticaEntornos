@@ -111,8 +111,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -56.5, y: 0}
-  m_SizeDelta: {x: 30, y: 15}
+  m_AnchoredPosition: {x: -0.36216, y: 18.3}
+  m_SizeDelta: {x: 95.876, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4558582529373735002
 CanvasRenderer:
@@ -144,8 +144,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: J1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9c885ed88326d0443a774cab93e552d9, type: 2}
-  m_sharedMaterial: {fileID: -1467753074861251582, guid: 9c885ed88326d0443a774cab93e552d9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ce8764ef488a4ca4ba6ec918ae94fbc7, type: 2}
+  m_sharedMaterial: {fileID: -8591073183968212456, guid: ce8764ef488a4ca4ba6ec918ae94fbc7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -169,15 +169,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
+  m_fontSize: 13.2
   m_fontSizeBase: 15
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 1
+  m_fontSizeMax: 15
   m_fontStyle: 0
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -304,5 +304,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vidaMaxima: 100
   relleno: {fileID: 625954623215561510}
-  icono: {fileID: 0}
   nombre: {fileID: 5984964747206061254}

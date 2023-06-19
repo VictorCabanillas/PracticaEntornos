@@ -10,7 +10,6 @@ public class BarraDeVida : MonoBehaviour
     
      [SerializeField] private float vidaMaxima;
      [SerializeField] GameObject relleno;
-     [SerializeField] GameObject icono;
      [SerializeField] GameObject nombre;
 
     public void CambiarBarra(int current)
@@ -26,11 +25,6 @@ public class BarraDeVida : MonoBehaviour
     public void SetNombre(String n)
     {
         nombre.GetComponent<TMP_Text>().text = n;
-    }
-
-    public void SetIcono(Sprite s)
-    {
-        icono.GetComponent<Image>().sprite = s;
     }
 }
 
