@@ -70,7 +70,7 @@ public class SpawningBehaviour : NetworkBehaviour
     public void InstantiateCharacterServerRpc(ulong id, int characterNum)
     {
         GameObject characterToSpawn = characters[characterNum];
-        GameObject characterGameObject = Instantiate(characterToSpawn);
+        GameObject characterGameObject = Instantiate(characterToSpawn, FindObjectOfType<CharacterSpawningPosition>().spawningPositions[playerId.Value - 1]); //Para hacer que se spawneen en posiciones diferentes en función de su ID
         characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);
         characterGameObject.transform.SetParent(transform, false);
         characterGameObject.GetComponent<PlayerHealth>().Health.Value = 100;
