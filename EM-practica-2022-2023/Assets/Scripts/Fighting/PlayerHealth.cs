@@ -4,6 +4,7 @@ using Systems;
 using UnityEngine;
 using Unity.Netcode;
 using Movement.Components;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : NetworkBehaviour
 {
@@ -24,6 +25,7 @@ public class PlayerHealth : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         Health.OnValueChanged += updateHealth;
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
     }
 
     public override void OnNetworkDespawn()
@@ -76,6 +78,21 @@ public class PlayerHealth : NetworkBehaviour
 
     public int GetVida(){
         return Health.Value;
+    }
+
+    private void onSceneLoad(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        Debug.Log("Escena cargada: " + sceneName);
+        if (sceneName == "SelectorPersonaje")
+        {
+            Debug.Log("Escena cargada selector personajes");
+            if (gameObject != null)
+            {
+                NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
+                Health.OnValueChanged -= updateHealth;
+                Destroy(gameObject);
+            }
+        }
     }
 
     /*private void OnApplicationQuit()

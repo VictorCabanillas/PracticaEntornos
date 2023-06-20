@@ -23,7 +23,7 @@ public class VictoryConditions : NetworkBehaviour
     [SerializeField] GameObject timerPanel;
     [SerializeField] TextMeshProUGUI winningText;
 
-
+    bool once = true;
 
 
 
@@ -64,10 +64,7 @@ public class VictoryConditions : NetworkBehaviour
             {
                 fighterMovement.speed = 3;
                 fighterMovement.jumpAmount = 1.2f;
-            }
-
-
-            
+            } 
         }
     }
 
@@ -77,6 +74,14 @@ public class VictoryConditions : NetworkBehaviour
         playersInGame -= 1;
         if(playersInGame == 1)
         {
+            PlayerHealth[] players = FindObjectsOfType<PlayerHealth>();
+            foreach(PlayerHealth p in players)
+            {
+                if (p.OwnerClientId == id) 
+                {
+                    p.Health.Value = 0;
+                }
+            }
             ActivateEndGameCanvasClientRpc();
         }
     }
@@ -84,7 +89,7 @@ public class VictoryConditions : NetworkBehaviour
     //En caso de desconexión actualizamos la variables correspondiente llamando a los métodos necesarios
     public override void OnNetworkDespawn()
     {
-        if (IsHost)
+        if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= addPlayer;
             NetworkManager.Singleton.OnClientDisconnectCallback -= removePlayer;
@@ -146,18 +151,42 @@ public class VictoryConditions : NetworkBehaviour
         SpawningBehaviour lastPlayer = spawninBehaviourArray[0];
         foreach(var x in spawninBehaviourArray)
         {
-            if(x.transform.childCount>0)
+            if (x != null)
             {
-                if(lastPlayer.GetComponentInChildren<PlayerHealth>().Health.Value < x.GetComponentInChildren<PlayerHealth>().Health.Value)
+                if (x.transform.childCount > 0)
                 {
-                    lastPlayer = x;
+                    int currentBestHealth;
+                    if (lastPlayer.GetComponentInChildren<PlayerHealth>() == null) 
+                    {
+                        currentBestHealth = 0; 
+                    }
+                    else 
+                    {
+                        currentBestHealth = lastPlayer.GetComponentInChildren<PlayerHealth>().Health.Value;
+                    }
+                    Debug.Log(x.GetComponentInChildren<PlayerHealth>().Health.Value);
+                    if (currentBestHealth < x.GetComponentInChildren<PlayerHealth>().Health.Value)
+                    {
+                        lastPlayer = x;
+                    }
                 }
             }
         }
         winningText.text = lastPlayer.playerName.Value.ToString() + " GANA!";
         victoryPanel.SetActive(true);
         timerPanel.GetComponent<CanvasGroup>().alpha = 0f; //Desactivamos la ceunta atrás ya que no nos interesa
+        RematchServerRpc();
+    }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void RematchServerRpc()
+    {
+        DontDestroyOnLoad(gameObject);
+        if (once)
+        {
+            SceneEventProgressStatus status = NetworkManager.Singleton.SceneManager.LoadScene("SelectorPersonaje", LoadSceneMode.Single);
+        }
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update

@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Netcode;
 using UI;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 public class selectorPlayerBehaviour : NetworkBehaviour
 {
@@ -21,6 +22,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     bool once = true;
     bool isSceneUnloading = false;
     bool spawnOneBar = true;
+
 
     private void Awake()
     {
@@ -49,7 +51,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     {
 
         Debug.Log("He entrado!");
-        transform.parent.GetComponent<SpawningBehaviour>().playerId.Value = NetworkManager.Singleton.ConnectedClients.Count;
+        transform.parent.GetComponent<SpawningBehaviour>().playerId.Value = FindObjectsOfType<selectorPlayerBehaviour>().Length;
         Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
     }
 

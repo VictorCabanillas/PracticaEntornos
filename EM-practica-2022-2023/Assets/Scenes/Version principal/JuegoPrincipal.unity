@@ -459,8 +459,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ui: {fileID: 7330279289346974000, guid: 1a3855789d1eacb488736d168d27e656, type: 3}
   positions:
-  - {x: 220, y: 200, z: 0}
   - {x: -220, y: 200, z: 0}
+  - {x: 220, y: 200, z: 0}
   - {x: -220, y: -200, z: 0}
   - {x: 220, y: -200, z: 0}
   playingServer: 0

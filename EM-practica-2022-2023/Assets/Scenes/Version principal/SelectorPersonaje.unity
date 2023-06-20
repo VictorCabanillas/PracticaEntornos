@@ -1986,8 +1986,6 @@ MonoBehaviour:
   - {x: 0, y: 40, z: 0}
   - {x: 0, y: -30, z: 0}
   playingServer: 0
-  selectorParent: {fileID: 1388442961}
-  playerSelectorHandler: {fileID: 1388442963}
 --- !u!1 &2021565020
 GameObject:
   m_ObjectHideFlags: 0
@@ -2012,9 +2010,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021565020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.07, y: 3.3215694, z: 0.08487196}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 40.4, y: 23.5, z: 0.08487196}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1555359825}
   m_Father: {fileID: 0}

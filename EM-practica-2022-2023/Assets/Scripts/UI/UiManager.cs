@@ -20,6 +20,7 @@ namespace UI
             //if (playingServer) { nPlayer = nPlayer - 1; }
             Debug.Log(nPlayer);
             Vector3 position = positions[nPlayer] + transform.position;
+            //Debug.Log(position);
             GameObject objeto = Instantiate(_ui, position, _ui.transform.rotation);
             objeto.transform.SetParent(transform);
             barras.Add(objeto);
