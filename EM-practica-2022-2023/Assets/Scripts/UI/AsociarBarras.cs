@@ -14,9 +14,9 @@ public class AsociarBarras : NetworkBehaviour
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
     }
 
+    //Crear las barras de vida en un orden determinado con su numero de vida y nombre
     public void crearBarras() 
     {
-        Debug.Log("Vamos a crear la barra de vida del jugador: "+ transform.parent.GetComponent<SpawningBehaviour>().playerId.Value);
         healthBar = UImanager.CrearBarras(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value - 1);
         healthBar.GetComponent<BarraDeVida>().SetNombre(transform.parent.GetComponent<SpawningBehaviour>().playerName.Value.ToString());
         GetComponent<PlayerHealth>().healthBar = healthBar;

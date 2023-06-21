@@ -15,12 +15,13 @@ namespace UI
 
         private List<GameObject> barras = new List<GameObject>();
 
+        //Crear las barras del selector
         public GameObject CrearBarras(int nPlayer)
         {
-            //if (playingServer) { nPlayer = nPlayer - 1; }
+            
             Debug.Log(nPlayer);
             Vector3 position = positions[nPlayer] + transform.position;
-            //Debug.Log(position);
+            
             GameObject objeto = Instantiate(_ui, position, _ui.transform.rotation);
             objeto.transform.SetParent(transform);
             barras.Add(objeto);
@@ -28,15 +29,17 @@ namespace UI
             return objeto;
         }
 
+        //Mover las barras por si algún jugador se desconecta, poder reorganizarlas
         public void DesplazarBarras()
         {
            for(int i = 0; i < barras.Count; i++)
             {
                 barras[i].transform.localPosition = positions[i];
-                //Debug.Log(positions[i]);
+               
             }
         }
 
+        //Eliminar las barras en caso de desconexión
         public void EliminarBarra(GameObject objeto)
         {
             barras.Remove(objeto);

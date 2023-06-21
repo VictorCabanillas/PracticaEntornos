@@ -32,6 +32,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         
     }
 
+    //Para cuandoi un jugador seleccione otro personaje, cambie el sprite donde se indica cual tiene seleccionado
     public void selectedCharacterChanged(int previous, int current)
     {
         if (selectorInfo == null) return;
@@ -39,6 +40,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (player != null) { player.image.sprite = player.playerSprites[current]; } 
     }
 
+    //Para cambiar la información (texto) de si está listo o no
     public void playerReady(bool previous, bool current) 
     {
         if (IsClient)
@@ -47,21 +49,18 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
+    //Para actualizar los IDValue en función vayan entrando
     public void ChangePlayerIDValue()
-    {
-
-        Debug.Log("He entrado!");
+    { 
         transform.parent.GetComponent<SpawningBehaviour>().playerId.Value = FindObjectsOfType<selectorPlayerBehaviour>().Length;
-        Debug.Log(NetworkManager.Singleton.ConnectedClients.Count);
     }
 
+    //Para cuando se conecte un jugador nuevo, le salga bien la informaciónd elos jugadores anteriores
     public override void OnNetworkSpawn()
     {
         selectedCharacter.OnValueChanged += selectedCharacterChanged;
         ready.OnValueChanged += playerReady;
 
-
-        //if (IsServer || IsHost) { playerId.Value = NetworkManager.Singleton.ConnectedClients.Count; }
         if (IsOwner) 
         {
             newPlayerConnectedServerRpc();
@@ -69,7 +68,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
         
         UImanager = GameObject.FindGameObjectWithTag("Canvas").GetComponent<UiManager>();
-        //selectorInfo = UImanager?.CrearBarras((int)OwnerClientId, transform.parent.GetComponent<SpawningBehaviour>().playingServer);
+        
         if (!IsOwner)
         {
             if (transform.parent != null)
@@ -87,11 +86,14 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         }
     }
 
+    //Ver si están todos listos
     [ServerRpc]
     public void playerReadyServerRpc() 
     {
         GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerIsReady();
     }
+
+    //Si un jugador nuevo se conecta, desactivamos el boton de start
     [ServerRpc]
     public void newPlayerConnectedServerRpc()
     {

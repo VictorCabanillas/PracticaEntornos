@@ -17,7 +17,7 @@ public class VictoryConditions : NetworkBehaviour
     public NetworkVariable<bool> temporizadorEnMarcha = new NetworkVariable<bool>(false); //Variable para cuando se acabe el temporizador salte la pantalla de victoria correspondiente
 
     public int playersInGame = 0; //Variables para almacenar los jugadores que se han conectado
-    //public GameObject healthBar; //Para activar y desacticvar las barras de vida (Referencia)
+    
 
     [SerializeField] GameObject victoryPanel; //Referencia hacia el panel de victoria
     [SerializeField] GameObject timerPanel;
@@ -26,21 +26,20 @@ public class VictoryConditions : NetworkBehaviour
     bool once = true;
 
 
-
+    //Comenzamos haciendo que el server o host de la partida calcule cuantos jugadores hay en función de las conexiones o desconexiones
     public override void OnNetworkSpawn()
     {
-        if (IsHost || IsServer)
+        if (IsHost || IsServer)  //Solo el servidor (o el host) es quien lleva la cuenta de los jugadores presentes
         {
-            NetworkManager.Singleton.SceneManager.OnLoadComplete += addPlayer;
-            NetworkManager.Singleton.OnClientDisconnectCallback += removePlayer;
+            NetworkManager.Singleton.SceneManager.OnLoadComplete += addPlayer; //Añadimos un jugador cuando se haya conectado
+            NetworkManager.Singleton.OnClientDisconnectCallback += removePlayer; //En caso de desconexión del cliente, quitamos un jugador
 
             temporizadorEnMarcha.Value = false;
-
-            
             temporizadorEnMarcha.OnValueChanged += CheckTemporizador;
+
             if(IsServer)
             {
-                playersInGame--;
+                playersInGame--; //Restamos el servidor como jugador 
             }
 
         }
@@ -51,14 +50,14 @@ public class VictoryConditions : NetworkBehaviour
     {
         playersInGame += 1;
         //TODO VER CUANDO ESTEN TODOS
-        if (playersInGame == NetworkManager.Singleton.ConnectedClients.Count) //En cuanto todos los personajes estén AQUI PASAMOS EL NUMERO DE JUGADORES QUE HAY EN EL JUEGO
+        if (playersInGame == NetworkManager.Singleton.ConnectedClients.Count) //En cuanto todos los personajes estén (AQUI PASAMOS EL NUMERO DE JUGADORES QUE HAY EN EL JUEGO)
         {
-            Debug.Log("Suficientes para comenzar");
             timerPanel.GetComponent<Timer>().enMarcha = true;
             ActivateTimePanelClientRpc(); //Activamos el temporizador
 
             alivePlayersRemaining.Value = playersInGame; //Asignamos el numero de jugador cogidos a la variable alive players
-            alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers;
+            alivePlayersRemaining.OnValueChanged += CheckNumberOfAlivePlayers; //Comprueba el numero de jugadores vivos (Para luego lanzar la condición de victoria)
+
             var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>(); //Buscamos el script de todos los personajes que se encarga de manejar el movimiento
             foreach (FighterMovement fighterMovement in fighterMovementOfPlayer) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
             {
@@ -72,14 +71,15 @@ public class VictoryConditions : NetworkBehaviour
     private void removePlayer(ulong id)
     {
         playersInGame -= 1;
-        if(playersInGame == 1)
+
+        if(playersInGame == 1) //En caso de quedar solo un juagador (Para cuando se descontecten los jugadores)
         {
             PlayerHealth[] players = FindObjectsOfType<PlayerHealth>();
             foreach(PlayerHealth p in players)
             {
                 if (p.OwnerClientId == id) 
                 {
-                    p.Health.Value = 0;
+                    p.Health.Value = 0; //Ponemos su vida a 0 (el jugador que se marcha) para cuando se calcule quien gana, lo muestre correctamente
                 }
             }
             ActivateEndGameCanvasClientRpc();
@@ -106,21 +106,20 @@ public class VictoryConditions : NetworkBehaviour
         if (newValue == 1) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
         {
             timerPanel.GetComponent<Timer>().enMarcha = false;
-            ActivateEndGameCanvasClientRpc();
+            ActivateEndGameCanvasClientRpc(); //Activamos el canvas de victoria
         }
     }
 
 
     void CheckTemporizador(bool oldValue, bool newValue)
     {
-        if (newValue == false) //AQUÍ VAMOS PASANDO EL PARANMETRO DE COMPROBAR CUANTOS QUEDAN VIVO
+        if (newValue == false) //AQUÍ VAMOS COMPROBANDO SI EL TEMPORIZADOS ESTÁ PARADO (YA HA TERMINADO)
         {
 
             ActivateEndGameCanvasClientRpc();
             var fighterMovementOfPlayer = FindObjectsOfType<FighterMovement>(); //Buscamos el script de todos los personajes que se encarga de manejar el movimiento
             foreach (FighterMovement fighterMovement in fighterMovementOfPlayer) //Lo activamos ya que por defecto se encuentra desactivado para evitar que se puedan mover antes de que se hayan conectado todos los jugadores
             {
-                Debug.Log("Parando jugadores");
                 fighterMovement.speed = 0;
                 fighterMovement.jumpAmount = 0f;
             }
@@ -132,20 +131,19 @@ public class VictoryConditions : NetworkBehaviour
     [ServerRpc]
     public void playerDisconnectedServerRpc()
     {
-        Debug.Log("Jugadores restantes vivos antes de desconectar: " + alivePlayersRemaining.Value);
         alivePlayersRemaining.Value--;
     }
 
 
     [ClientRpc]
-    void ActivateTimePanelClientRpc()
+    void ActivateTimePanelClientRpc() //Para el panel del tiempo
     {
         timerPanel.GetComponent<CanvasGroup>().alpha = 1;
 
     }
 
     [ClientRpc]
-    void ActivateEndGameCanvasClientRpc()
+    void ActivateEndGameCanvasClientRpc() //Para el canvas de victoria
     {
         SpawningBehaviour[] spawninBehaviourArray = FindObjectsOfType<SpawningBehaviour>();
         SpawningBehaviour lastPlayer = spawninBehaviourArray[0];
@@ -164,7 +162,7 @@ public class VictoryConditions : NetworkBehaviour
                     {
                         currentBestHealth = lastPlayer.GetComponentInChildren<PlayerHealth>().Health.Value;
                     }
-                    Debug.Log(x.GetComponentInChildren<PlayerHealth>().Health.Value);
+                    
                     if (currentBestHealth < x.GetComponentInChildren<PlayerHealth>().Health.Value)
                     {
                         lastPlayer = x;
@@ -178,6 +176,8 @@ public class VictoryConditions : NetworkBehaviour
         RematchServerRpc();
     }
 
+
+    //Para volver a jugar una vez se haya terminado la partida anterior
     [ServerRpc(RequireOwnership = false)]
     public void RematchServerRpc()
     {
@@ -189,11 +189,7 @@ public class VictoryConditions : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+   
 
     // Update is called once per frame
     void Update()

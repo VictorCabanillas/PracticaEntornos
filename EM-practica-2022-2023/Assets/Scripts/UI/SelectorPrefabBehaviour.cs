@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UI;
 using TMPro;
 
+//--------------------------------------------EN DESUSO---------------------------------
+
 public class SelectorPrefabBehaviour : NetworkBehaviour
 {
     UiManager uiManager;

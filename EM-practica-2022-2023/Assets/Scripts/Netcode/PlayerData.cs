@@ -14,11 +14,10 @@ public class PlayerData : NetworkBehaviour
 
     
 
-    // Start is called before the first frame update
+  
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        //Object.DontDestroyOnLoad(gameObject);
         Name.OnValueChanged += (string previous, string current) => { Name.Value = current; };
     }
 
@@ -37,11 +36,7 @@ public class PlayerData : NetworkBehaviour
         }      
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     //Para la ejecución de la partida (personajes)
     [ServerRpc]
@@ -69,7 +64,7 @@ public class PlayerData : NetworkBehaviour
         {
             Object.DontDestroyOnLoad(gameObject);
             Name.Value = PlayerPrefs.GetString("NombreJugador");
-            //InstantiateSelectorServerRpc(OwnerClientId);
+            
         }
     }
 }

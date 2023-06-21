@@ -12,16 +12,17 @@ public class BarraDeVida : MonoBehaviour
      [SerializeField] GameObject relleno;
      [SerializeField] GameObject nombre;
 
+    //Actualizar relleno
     public void CambiarBarra(int current)
     {
-        //vidaActual = player.GetComponent<>().GetVida();
-        //Debug.Log("Cambiar valor barra");
+        
         GetComponent<Image>().fillAmount = current / vidaMaxima;
         Debug.Log(current);
-        Debug.Log("Cambiar valor barra");
+        
         relleno.GetComponent<Image>().fillAmount = current / vidaMaxima;
     }
 
+    //Nombre en las barras
     public void SetNombre(String n)
     {
         nombre.GetComponent<TMP_Text>().text = n;

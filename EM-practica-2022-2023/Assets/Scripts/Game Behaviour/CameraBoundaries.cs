@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class CameraBoundaries : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // Para asignar los limites de la camara y evitar que se salga del escenario bloqueandola cuando llega a cierto punto
     void Start()
     {
+        //A través del codigo, le asignamos los componentes necesarios
         CinemachineConfiner cameraController = FindObjectOfType<CinemachineConfiner>();
         CinemachineVirtualCameraBase virtualCamera = (CinemachineVirtualCameraBase)CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;
         virtualCamera.PreviousStateIsValid = false;

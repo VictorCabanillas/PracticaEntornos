@@ -14,63 +14,58 @@ public class PlayerHealth : NetworkBehaviour
 
     bool isAlive = true;
 
-    // Start is called before the first frame update
     void Start()
     {
-
-        victoryCondition = FindObjectOfType<VictoryConditions>();
-
+        victoryCondition = FindObjectOfType<VictoryConditions>(); //Buscamos objeto del tipo VictoryCondition para utilizarlo más alante.
     }
 
     public override void OnNetworkSpawn()
     {
-        Health.OnValueChanged += updateHealth;
+        Health.OnValueChanged += updateHealth; //Delegado que está comrpobando desde que spawnean los jugadores (vida de estos) su valor vida y lo actualiza para la barra
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += onSceneLoad;
     }
 
     public override void OnNetworkDespawn()
     {
-        //Health.Value = 0;
-        //healthBar.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
-        //victoryCondition.alivePlayersRemaining.Value -= 1;
-        //isAlive = false;
         if (IsOwner)
         {
-            Debug.Log("Aviso me marcho");
+            // Si es owner, llamo al objeto de tipo victoryDondition para usar el método playerDisconnectedServerRpc y poder actualizar el número de jugdores vivos que quedan
             victoryCondition.playerDisconnectedServerRpc();
-            Debug.Log("Ya hice la rpc");
+            
         }
-        if (healthBar != null)
+
+        if (healthBar != null) //Si la barra de vida está asignada
         {
-            healthBar?.GetComponent<BarraDeVida>()?.CambiarBarra(0);
+            healthBar?.GetComponent<BarraDeVida>()?.CambiarBarra(0); //Ponemos la barra de vida a 0 en caso de desconexión
         }
         Health.OnValueChanged -= updateHealth;
     }
 
     
-
+    //Método para cuando recibe algun golpe
     void updateHealth(int previous,int current) 
     {
-        if(healthBar != null ) 
+        if(healthBar != null )  //Si está asignada
         {
-            healthBar?.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
+            healthBar?.GetComponent<BarraDeVida>().CambiarBarra(Health.Value); //Actualizamos el valor de la barra de vida 
         }
         
-        if (Health.Value <= 0 && (IsServer) && isAlive) 
+        if (Health.Value <= 0 && (IsServer) && isAlive) //a continuacion comprobamos si esta muerto (su vida ha llegado a 0)
         {
+            //En caso de estarlo, eliminamos todo control sobre el personaje y destruimos su sprite ejecutando antes la animación de morir.
             isAlive = false;
             FighterMovement movement = GetComponent<FighterMovement>();
             movement.speed = 0;
             movement.jumpAmount = 0;
             movement.Die();
-            //MIRAR AQUI PARA DESACTIVAR BARRA
-            //healthBar.gameObject.SetActive(false);
+      
             
             victoryCondition.alivePlayersRemaining.Value -= 1;
-            Debug.Log("Jugadores restantes: " + victoryCondition.alivePlayersRemaining.Value);
+            
         }
     }
 
+    //LLamamos a este metodo cuando bajemos la vida
     public void DecreaseHealth(int amount) 
     {
         Health.Value -= amount;
@@ -80,12 +75,12 @@ public class PlayerHealth : NetworkBehaviour
         return Health.Value;
     }
 
+    //Cuando termina la partida y volvemos al selector, volvemos a generar los personajes borrando el anterior 
     private void onSceneLoad(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        Debug.Log("Escena cargada: " + sceneName);
+       
         if (sceneName == "SelectorPersonaje")
         {
-            Debug.Log("Escena cargada selector personajes");
             if (gameObject != null)
             {
                 NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
@@ -95,12 +90,4 @@ public class PlayerHealth : NetworkBehaviour
         }
     }
 
-    /*private void OnApplicationQuit()
-    {
-        Health.Value = 0;
-        isAlive = false;
-        healthBar.GetComponent<BarraDeVida>().CambiarBarra(Health.Value);
-        victoryCondition.alivePlayersRemaining.Value -= 1;
-        Health.OnValueChanged -= updateHealth;
-    }*/
 }

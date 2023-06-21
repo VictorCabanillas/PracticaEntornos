@@ -11,3 +11,5 @@ public class PlayerSelectorButtons : MonoBehaviour
     public Button readyButton;
     public Button startButton;
 }
+
+//Asignación botones en selector

@@ -11,3 +11,5 @@ public class PlayerSelectorInfo : MonoBehaviour
     public Image image;
     public Sprite[] playerSprites;
 }
+
+//Asignación de la información en el player selector

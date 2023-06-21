@@ -15,6 +15,7 @@ public class ServerVisualAssets : NetworkBehaviour
     {
         if (!IsServer || IsHost) return;
 
+        //DESACTIVAMOS TODO LO VISUAL DEL SERVIDOR PARA AHORRAR MEMORIA
 
         SpriteRenderer[] spriterendererList = FindObjectsOfType<SpriteRenderer>();
         Image[] imageList = FindObjectsOfType<Image>();

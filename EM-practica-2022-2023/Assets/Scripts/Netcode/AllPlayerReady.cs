@@ -9,7 +9,7 @@ public class AllPlayerReady : NetworkBehaviour
 {
     int playerReady = 0;
 
-
+    //Para activar o desactivar el botón de comenzar la partida una vez los jugadores esten listos
     public void playerIsReady() 
     {
         playerReady += 1;
@@ -19,6 +19,8 @@ public class AllPlayerReady : NetworkBehaviour
         }
     }
 
+
+    //Si algún jugador no está listo porque cambia de decisión, comprobamos el numero de jugadores y actiamos el botón en función de la condición
     [ServerRpc]
     public void playerUnreadyServerRpc() 
     {
@@ -33,6 +35,7 @@ public class AllPlayerReady : NetworkBehaviour
         }
     }
 
+    //Para activar el botón de start solo al primer jugador en entrar
     [ClientRpc]
     public void activateStartButtonClientRpc() 
     {
@@ -66,7 +69,7 @@ public class AllPlayerReady : NetworkBehaviour
         }
     }
 
-
+    //Funcionalidad del botón de start
     [ServerRpc(RequireOwnership =false)]
     public void startMatchServerRpc() 
     {
@@ -75,8 +78,5 @@ public class AllPlayerReady : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    public override void OnNetworkDespawn()
-    {
-        //NetworkManager.Singleton.SceneManager.LoadScene("JuegoPrincipal", LoadSceneMode.Single);
-    }
+    
 }

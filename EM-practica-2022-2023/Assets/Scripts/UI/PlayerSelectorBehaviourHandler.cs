@@ -9,29 +9,28 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
     
     public List<SpawningBehaviour> listaSelectorPlayer = new List<SpawningBehaviour>();
 
-    private void Awake()
-    {
-        
-    }
-
+   
+    //para actualizar el id de los jugadores en caso de desconexión (si se va el 2 y hay 3 y 4, se actualizan solo sus ids y no el del 1)
     private void ProcessPlayerId(int playerDisconnectedID)
     {
         foreach (var player in listaSelectorPlayer)
         {
             if(player != null && player.playerId.Value>playerDisconnectedID)
             {
-                //player.playerId.Value--;
+                
                 player.playerId.Value = player.playerId.Value - 1;
             }
         }
     }
 
+    //Contador de cuantos jugadores hay
     [ServerRpc(RequireOwnership =false)]
     public void PlayerConectServerRpc()
     {
         playerCount.Value = playerCount.Value + 1;
     }
 
+    //Si se desconecta un jugador disminuye en 1 el numero
     public void PlayerDisconect(int playerDisconectedID)
     {
         if (IsServer)
@@ -41,16 +40,11 @@ public class PlayerSelectorBehaviourHandler : NetworkBehaviour
         }
     }
 
+
     public void PlayerConect()
     {
         PlayerConectServerRpc();
     }
 
-
-    private void Update()
-    {
-        
-        
-    }
 
 }
