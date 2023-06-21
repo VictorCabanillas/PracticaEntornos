@@ -19,12 +19,31 @@ public class AllPlayerReady : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += playerUnready;
+        }
+    }
 
     //Si algún jugador no está listo porque cambia de decisión, comprobamos el numero de jugadores y actiamos el botón en función de la condición
-    [ServerRpc]
-    public void playerUnreadyServerRpc() 
+    //[ServerRpc (RequireOwnership =false)]
+    public void playerUnready(ulong id) 
     {
-        playerReady -= 1;
+        selectorPlayerBehaviour[] players = FindObjectsOfType<selectorPlayerBehaviour>();
+        foreach (selectorPlayerBehaviour p in players)
+        {
+            if (p.OwnerClientId == id)
+            {
+                if (p.ready.Value) 
+                {
+                    Debug.Log("Alguien ya no esta ready");
+                    playerReady -= 1;
+                }
+            }
+        }
+        
         if (playerReady == NetworkManager.Singleton.ConnectedClients.Count)
         {
             activateStartButtonClientRpc();
@@ -78,5 +97,17 @@ public class AllPlayerReady : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    
+
+    public override void OnNetworkDespawn()
+    {
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= playerUnready;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        NetworkManager.Singleton.OnClientDisconnectCallback -= playerUnready;
+    }
 }

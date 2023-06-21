@@ -17,7 +17,6 @@ public class BarraDeVida : MonoBehaviour
     {
         
         GetComponent<Image>().fillAmount = current / vidaMaxima;
-        Debug.Log(current);
         
         relleno.GetComponent<Image>().fillAmount = current / vidaMaxima;
     }

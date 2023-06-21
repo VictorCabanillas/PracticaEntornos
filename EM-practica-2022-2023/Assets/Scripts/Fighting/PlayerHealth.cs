@@ -12,7 +12,7 @@ public class PlayerHealth : NetworkBehaviour
     public GameObject healthBar;
     private VictoryConditions victoryCondition;   
 
-    bool isAlive = true;
+    public bool isAlive = true;
 
     void Start()
     {
@@ -27,18 +27,27 @@ public class PlayerHealth : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
+        isAlive = false;
         if (IsOwner)
         {
-            // Si es owner, llamo al objeto de tipo victoryDondition para usar el método playerDisconnectedServerRpc y poder actualizar el número de jugdores vivos que quedan
+            // Si es owner, llamo al objeto de tipo victoryCondition para usar el método playerDisconnectedServerRpc y poder actualizar el número de jugdores vivos que quedan
             victoryCondition.playerDisconnectedServerRpc();
+            disconnectionServerRpc();
             
         }
-
+        
         if (healthBar != null) //Si la barra de vida está asignada
         {
             healthBar?.GetComponent<BarraDeVida>()?.CambiarBarra(0); //Ponemos la barra de vida a 0 en caso de desconexión
         }
         Health.OnValueChanged -= updateHealth;
+        Destroy(this);
+    }
+
+    [ServerRpc]
+    void disconnectionServerRpc() 
+    {
+        Health.Value = 0;
     }
 
     
@@ -81,11 +90,14 @@ public class PlayerHealth : NetworkBehaviour
        
         if (sceneName == "SelectorPersonaje")
         {
-            if (gameObject != null)
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
+            Health.OnValueChanged -= updateHealth;
+            if (this != null)
             {
-                NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= onSceneLoad;
-                Health.OnValueChanged -= updateHealth;
-                Destroy(gameObject);
+                if (gameObject != null)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

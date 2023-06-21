@@ -12,7 +12,7 @@ public class selectorPlayerBehaviour : NetworkBehaviour
     public GameObject selectorInfo;
     public GameObject parent;
 
-    NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    public NetworkVariable<bool> ready = new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     NetworkVariable<int> selectedCharacter = new NetworkVariable<int>(0,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
 
     PlayerSelectorButtons selectorButtons;
@@ -108,7 +108,6 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         if (IsClient && spawnOneBar)
         {
             spawnOneBar = false;
-            Debug.Log(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value);
             selectorInfo = UImanager?.CrearBarras(transform.parent.GetComponent<SpawningBehaviour>().playerId.Value);
         }
         
@@ -148,9 +147,10 @@ public class selectorPlayerBehaviour : NetworkBehaviour
         //If ready was true decrease player count;
         if (!isSceneUnloading)
         {
-            if (ready.Value)
+            if (ready.Value && IsOwner)
             {
-                GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
+                Debug.Log("Se ejecuta condicion");
+                //GameObject.FindGameObjectWithTag("AllPlayerReady").GetComponent<AllPlayerReady>().playerUnreadyServerRpc();
             }           
             UImanager.EliminarBarra(selectorInfo);
             UImanager.DesplazarBarras();

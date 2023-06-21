@@ -24,6 +24,7 @@ public class VictoryConditions : NetworkBehaviour
     [SerializeField] TextMeshProUGUI winningText;
 
     bool once = true;
+    bool doOnce = true;
 
 
     //Comenzamos haciendo que el server o host de la partida calcule cuantos jugadores hay en función de las conexiones o desconexiones
@@ -71,17 +72,21 @@ public class VictoryConditions : NetworkBehaviour
     private void removePlayer(ulong id)
     {
         playersInGame -= 1;
-
-        if(playersInGame == 1) //En caso de quedar solo un juagador (Para cuando se descontecten los jugadores)
+        PlayerHealth[] players = FindObjectsOfType<PlayerHealth>();
+        Debug.Log("Desconectado: " + id);
+        foreach (PlayerHealth p in players)
         {
-            PlayerHealth[] players = FindObjectsOfType<PlayerHealth>();
-            foreach(PlayerHealth p in players)
+            Debug.Log("Mirando: " + p.OwnerClientId);
+            if (p.OwnerClientId == id)
             {
-                if (p.OwnerClientId == id) 
-                {
-                    p.Health.Value = 0; //Ponemos su vida a 0 (el jugador que se marcha) para cuando se calcule quien gana, lo muestre correctamente
-                }
+                Debug.Log("Pongo la vida de alguien a 0");
+                Destroy(p);
+                //p.Health.Value = 0; //Ponemos su vida a 0 (el jugador que se marcha) para cuando se calcule quien gana, lo muestre correctamente
             }
+        }
+
+        if (playersInGame == 1) //En caso de quedar solo un juagador (Para cuando se descontecten los jugadores)
+        {
             ActivateEndGameCanvasClientRpc();
         }
     }
@@ -128,10 +133,13 @@ public class VictoryConditions : NetworkBehaviour
     }
 
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void playerDisconnectedServerRpc()
     {
-        alivePlayersRemaining.Value--;
+        if (alivePlayersRemaining != null)
+        {
+            alivePlayersRemaining.Value--;
+        }
     }
 
 
@@ -145,15 +153,23 @@ public class VictoryConditions : NetworkBehaviour
     [ClientRpc]
     void ActivateEndGameCanvasClientRpc() //Para el canvas de victoria
     {
+        if (!doOnce) return;
+        doOnce = false;
         SpawningBehaviour[] spawninBehaviourArray = FindObjectsOfType<SpawningBehaviour>();
         SpawningBehaviour lastPlayer = spawninBehaviourArray[0];
-        foreach(var x in spawninBehaviourArray)
+
+        PlayerHealth[] players = FindObjectsOfType<PlayerHealth>();
+        Debug.Log("Al sacar el cartel quedan " + spawninBehaviourArray.Length);
+        Debug.Log("Al sacar el cartel quedan PH " + players.Length);
+        int currentBestHealth;
+        foreach (var x in spawninBehaviourArray)
         {
+            
             if (x != null)
             {
                 if (x.transform.childCount > 0)
                 {
-                    int currentBestHealth;
+                    
                     if (lastPlayer.GetComponentInChildren<PlayerHealth>() == null) 
                     {
                         currentBestHealth = 0; 
@@ -162,18 +178,25 @@ public class VictoryConditions : NetworkBehaviour
                     {
                         currentBestHealth = lastPlayer.GetComponentInChildren<PlayerHealth>().Health.Value;
                     }
-                    
-                    if (currentBestHealth < x.GetComponentInChildren<PlayerHealth>().Health.Value)
+                    Debug.Log(x.playerId.Value);
+                    Debug.Log("Vida actual: " + x.GetComponentInChildren<PlayerHealth>().Health.Value);
+                    Debug.Log("CurrentBestHealth: " + currentBestHealth);
+                    Debug.Log("LastPlayer: " + lastPlayer.playerId.Value);
+                    Debug.Log("Esta vivo: "+ x.GetComponentInChildren<PlayerHealth>().isAlive);
+                    if (currentBestHealth+1 <= x.GetComponentInChildren<PlayerHealth>().Health.Value && x.GetComponentInChildren<PlayerHealth>().isAlive)
                     {
+                        Debug.Log("Decido cambiar");
                         lastPlayer = x;
                     }
                 }
+                else { currentBestHealth = 0; }
             }
         }
+        Debug.Log("LastPlayer: " + lastPlayer.playerId.Value);
         winningText.text = lastPlayer.playerName.Value.ToString() + " GANA!";
         victoryPanel.SetActive(true);
         timerPanel.GetComponent<CanvasGroup>().alpha = 0f; //Desactivamos la ceunta atrás ya que no nos interesa
-        RematchServerRpc();
+        esperarParaCambiar(1);
     }
 
 
@@ -184,12 +207,20 @@ public class VictoryConditions : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
         if (once)
         {
+            once = false;
+            Debug.Log("Antes de rutina");
+            
             SceneEventProgressStatus status = NetworkManager.Singleton.SceneManager.LoadScene("SelectorPersonaje", LoadSceneMode.Single);
         }
         Destroy(gameObject);
     }
 
-   
+    IEnumerator esperarParaCambiar(int i) 
+    {
+        Debug.Log("Dentro de rutina");
+        yield return new WaitForSeconds(i);
+        RematchServerRpc();
+    }
 
     // Update is called once per frame
     void Update()

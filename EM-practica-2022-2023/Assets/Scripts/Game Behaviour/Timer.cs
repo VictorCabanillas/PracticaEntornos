@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 using Movement.Components;
+using UnityEngine.SceneManagement;
 
 public class Timer : NetworkBehaviour
 {
@@ -15,7 +16,7 @@ public class Timer : NetworkBehaviour
     
     public bool enMarcha;
 
-
+    float espera = 3;
     
     private void Start()
     {
@@ -72,5 +73,16 @@ public class Timer : NetworkBehaviour
                 
             }
         }
+        if (!enMarcha && NetworkManager.Singleton.IsServer) 
+        {
+            espera -= Time.deltaTime;
+            if (espera <= 0) 
+            {
+                Debug.Log("Me piro");
+                SceneEventProgressStatus status = NetworkManager.Singleton.SceneManager.LoadScene("SelectorPersonaje", LoadSceneMode.Single);
+            }
+        }
     }
+
+    
 }
